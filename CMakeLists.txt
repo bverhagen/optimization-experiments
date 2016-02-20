@@ -12,6 +12,9 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 include_directories ("${PROJECT_SOURCE_DIR}/3rdparty/benchmark/include")
 include_directories(common/include)
 
+# TODO: determine target architecture through command line option
+include_directories(common/include/i386)
+
 add_subdirectory(3rdparty)
 add_subdirectory(00-benchmark)
 add_subdirectory(01-simd-and)
