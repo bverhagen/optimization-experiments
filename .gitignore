@@ -30,3 +30,7 @@
 # Build directories
 debug
 release
+build
+
+# vim swp files
+*.swp

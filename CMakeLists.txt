@@ -1,0 +1,17 @@
+cmake_minimum_required (VERSION 2.8.12)
+project (optimization-experiments)
+
+# Set compiler flags
+set(DEFAULT_CXX_COMPILER_OPTIONS "-Wall -Werror")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DEFAULT_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+
+# Include paths
+include_directories ("${PROJECT_SOURCE_DIR}/3rdparty/benchmark/include")
+include_directories(common/include)
+
+add_subdirectory(3rdparty)
+add_subdirectory(00-benchmark)
+add_subdirectory(01-simd-and)
