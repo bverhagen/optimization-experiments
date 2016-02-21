@@ -9,12 +9,14 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 
 # Include paths
-include_directories ("${PROJECT_SOURCE_DIR}/3rdparty/benchmark/include")
+include_directories (3rdparty/benchmark/include)
+include_directories (3rdparty/Catch/single_include)
 include_directories(common/include)
 
 # TODO: determine target architecture through command line option
 include_directories(common/include/i386)
 
 add_subdirectory(3rdparty)
+add_subdirectory(catch)
 add_subdirectory(00-benchmark)
 add_subdirectory(01-simd-and)

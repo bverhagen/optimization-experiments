@@ -11,3 +11,6 @@ include_directories(include)
 
 add_executable(simd-and-performance src/performance.cpp)
 target_link_libraries (simd-and-performance benchmark pthread c rt)
+
+add_executable(simd-and-unittest src/unittest.cpp)
+target_link_libraries (simd-and-unittest catch c rt)

@@ -5,7 +5,7 @@
 
 namespace SimdAnd {
 	template<typename T>
-	void simdAndNormal(T* const input1, T* const input2, T* output, std::size_t nbOfElements)
+	void simdAndNormal(const T* const input1, const T* const input2, T* const output, std::size_t nbOfElements)
 	{
 		for(std::size_t i = 0; i < nbOfElements; ++i) {
 			output[i] = input1[i] & input2[i];
