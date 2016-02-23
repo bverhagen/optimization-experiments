@@ -4,7 +4,7 @@
 #include <cstdint>
 
 namespace TargetSpecific {
-	typedef std::uint32_t unsigned_register_t;
+	typedef std::uint64_t unsigned_register_t;
 }
 
 #endif

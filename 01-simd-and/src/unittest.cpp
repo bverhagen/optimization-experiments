@@ -9,6 +9,7 @@
 
 using std::size_t;
 using std::vector;
+using TargetSpecific::unsigned_register_t;
 
 namespace {
 	template<typename T>

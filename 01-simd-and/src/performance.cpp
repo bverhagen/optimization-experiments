@@ -5,6 +5,8 @@
 #include "randomInput.h"
 #include "simd-and.h"
 
+using TargetSpecific::unsigned_register_t;
+
 namespace SimdAnd {
 	namespace Performance {
 		typedef uint8_t simdAnd_t;
