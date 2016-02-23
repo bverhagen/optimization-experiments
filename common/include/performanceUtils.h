@@ -1,12 +1,14 @@
-#ifndef __COMMON_H__
-#define __COMMON_H__
+#ifndef __PERFORMANCEUTILS_H__
+#define __PERFORMANCEUTILS_H__
 
 namespace performanceUtils
 {
 	template<typename T> 
-	inline void forceUseOfVariable(T& var) {
+	inline void forceUseOfVariable(T& var) noexcept {
 		(void) var;	
 	}
-};
+
+	bool alwaysReturnFalse(void) noexcept;
+}
 
 #endif

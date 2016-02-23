@@ -2,10 +2,13 @@
 #define __SIMD_AND_H__
 
 #include <cstdlib>
+#include <cassert>
+
+#include "compilerSpecific.h"
 
 namespace SimdAnd {
 	template<typename T>
-	void simdAndNormal(const T* const input1, const T* const input2, T* const output, std::size_t nbOfElements)
+	void simdAndNormal(const T* const input1, const T* const input2, T* const output, std::size_t nbOfElements) noexcept
 	{
 		for(std::size_t i = 0; i < nbOfElements; ++i) {
 			output[i] = input1[i] & input2[i];
@@ -13,7 +16,8 @@ namespace SimdAnd {
 	}
 
 	template<typename ActualType, typename SimdType>
-	void simdAndForceRegisterSimd(const ActualType* const input1, const ActualType* const input2, ActualType* const output, size_t actualSize) {
+	void simdAndForceRegisterSimd(const ActualType* const input1, const ActualType* const input2, ActualType* const output, size_t actualSize) noexcept {
+		assert(actualSize * sizeof(ActualType) % sizeof(SimdType) == 0);
 		const size_t nbOfSimdIterations = actualSize * sizeof(ActualType)/sizeof(SimdType);
 
 		const SimdType* const simd_input1 = reinterpret_cast<const SimdType* const>(input1);

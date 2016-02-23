@@ -2,6 +2,7 @@
 
 #include <cstdlib>
 #include <vector>
+#include <iostream>
 
 #include "targetSpecific.h"
 #include "randomInput.h"
@@ -80,6 +81,28 @@ namespace SimdAnd {
 
 					THEN("The outputs should be the same") {
 						compareArrays(actual_result_force_simd, actual_result_normal, nbOfElements);
+					}
+				}
+			}
+
+			GIVEN("Two aligned input") {
+				typedef uint8_t test_type_t;
+				const size_t nbOfRealElements = 4096U;
+				const size_t nbOfElements = nbOfRealElements * sizeof(test_type_t)/sizeof(v4uint8_t);
+
+				v4uint8_t input1[nbOfElements];
+				v4uint8_t input2[nbOfElements];
+				Common::randomInput( (test_type_t*)(input1), (test_type_t*)(input2), nbOfRealElements);
+			
+				WHEN("We apply the inputs on different kinds of AND implementations") {
+					test_type_t actual_result_normal[nbOfRealElements];
+					simdAndNormal((test_type_t*) input1, (test_type_t*) input2, (test_type_t*) actual_result_normal, nbOfRealElements);
+
+					v4uint8_t actual_result_vector[nbOfElements];
+					simdAndVector(input1, input2, actual_result_vector, nbOfElements);
+					
+					THEN("The outputs should be the same") {
+						compareArrays((test_type_t*)(actual_result_vector), actual_result_normal, nbOfRealElements);
 					}
 				}
 			}

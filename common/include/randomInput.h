@@ -7,7 +7,7 @@
 
 namespace Common {
 	template<typename T>
-	inline void randomInput(T* const input, std::size_t nbOfElements) {
+	inline void randomInput(T* const input, std::size_t nbOfElements) noexcept {
 		std::default_random_engine generator;
 		std::uniform_int_distribution<T> distribution(0);
 
@@ -17,7 +17,7 @@ namespace Common {
 	}
 	
 	template<typename T>
-	inline void randomInput(T* const input1, T* const input2, std::size_t nbOfElements) {
+	inline void randomInput(T* const input1, T* const input2, std::size_t nbOfElements) noexcept {
 		randomInput(input1, nbOfElements);
 		randomInput(input2, nbOfElements);
 	}
