@@ -8,6 +8,11 @@ namespace performanceUtils
 		(void) var;	
 	}
 
+	template<typename T> 
+	inline void forceUseOfVariable(T* var) noexcept {
+		(void) var;	
+	}
+
 	bool alwaysReturnFalse(void) noexcept;
 }
 

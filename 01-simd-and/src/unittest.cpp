@@ -76,16 +76,16 @@ namespace SimdAnd {
 					test_type_t actual_result_normal[nbOfElements];
 					simdAndNormal(input1, input2, actual_result_normal, nbOfElements);
 					
-					test_type_t actual_result_force_simd[nbOfElements];
-					simdAndForceRegisterSimd<test_type_t, unsigned_register_t>(input1, input2, actual_result_force_simd, nbOfElements);
+					test_type_t actual_result_force_normal[nbOfElements];
+					simdAndForceNormal(input1, input2, actual_result_force_normal, nbOfElements);
 
 					THEN("The outputs should be the same") {
-						compareArrays(actual_result_force_simd, actual_result_normal, nbOfElements);
+						compareArrays(actual_result_force_normal, actual_result_normal, nbOfElements);
 					}
 				}
 			}
 
-			GIVEN("Two aligned input") {
+			GIVEN("Two aligned inputs") {
 				typedef uint8_t test_type_t;
 				const size_t nbOfRealElements = 4096U;
 				const size_t nbOfElements = nbOfRealElements * sizeof(test_type_t)/sizeof(v4uint8_t);

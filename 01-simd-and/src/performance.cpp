@@ -27,8 +27,7 @@ namespace SimdAnd {
 			while(state.KeepRunning()) {
 				simdAndNormal(input1, input2, output, nbOfElements);
 				if(performanceUtils::alwaysReturnFalse()) {
-					performanceUtils::forceUseOfVariable(output[0]);
-					performanceUtils::forceUseOfVariable(output[nbOfElements-1]);
+					performanceUtils::forceUseOfVariable(output);
 				}
 			}
 		}
@@ -42,32 +41,13 @@ namespace SimdAnd {
 
 			uint8_t output[nbOfElements];
 			while(state.KeepRunning()) {
-				simdAndNormal(input1, input2, output, nbOfElements);
+				simdAndForceNormal(input1, input2, output, nbOfElements);
 				if(performanceUtils::alwaysReturnFalse()) {
-					performanceUtils::forceUseOfVariable(output[0]);
-					performanceUtils::forceUseOfVariable(output[nbOfElements-1]);
+					performanceUtils::forceUseOfVariable(output);
 				}
 			}
 		}
-		BENCHMARK(SimdAndNormal)->Range(minRange, maxRange);
-
-
-		static void SimdAndForceRegisterSimd(benchmark::State& state) {
-			const size_t nbOfElements = state.range_x();
-			simdAnd_t input1[nbOfElements];
-			simdAnd_t input2[nbOfElements];
-			Common::randomInput(input1, input2, nbOfElements);
-
-			uint8_t output[nbOfElements];
-			while(state.KeepRunning()) {
-			simdAndForceRegisterSimd<simdAnd_t, unsigned_register_t>(input1, input2, output, nbOfElements);
-				if(performanceUtils::alwaysReturnFalse()) {
-					performanceUtils::forceUseOfVariable(output[0]);
-					performanceUtils::forceUseOfVariable(output[nbOfElements-1]);
-				}
-			}
-		}
-		BENCHMARK(SimdAndForceRegisterSimd)->Range(minRange, maxRange);
+		BENCHMARK(SimdAndForceNormal)->Range(minRange, maxRange);
 
 		static void SimdAndVector(benchmark::State& state) {
 			const size_t nbOfElements = state.range_x() * sizeof(uint8_t) / sizeof(v4uint8_t);
@@ -79,8 +59,7 @@ namespace SimdAnd {
 			while(state.KeepRunning()) {
 				simdAndVector(input1, input2, output, nbOfElements);
 				if(performanceUtils::alwaysReturnFalse()) {
-					performanceUtils::forceUseOfVariable(output[0]);
-					performanceUtils::forceUseOfVariable(output[nbOfElements-1]);
+					performanceUtils::forceUseOfVariable(output);
 				}
 			}
 		}

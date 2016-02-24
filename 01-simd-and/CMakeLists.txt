@@ -26,7 +26,7 @@ include_directories(include/compiler-specific/gcc)
 # Lib paths
 
 add_executable(simd-and-performance src/performance.cpp)
-target_link_libraries (simd-and-performance common benchmark pthread c rt)
+target_link_libraries (simd-and-performance common ${OPTIM_LINKER_BENCHMARK} ${OPTIM_LINKER_STD})
 
 add_executable(simd-and-unittest src/unittest.cpp)
-target_link_libraries (simd-and-unittest catch c rt)
+target_link_libraries (simd-and-unittest common ${OPTIM_LINKER_UNITTEST} ${OPTIM_LINKER_STD})
