@@ -34,6 +34,24 @@ namespace SimdAnd {
 		}
 		BENCHMARK(SimdAndNormal)->Range(minRange, maxRange);
 
+		static void SimdAndForceNormal(benchmark::State& state) {
+			const size_t nbOfElements = state.range_x();
+			simdAnd_t input1[nbOfElements];
+			simdAnd_t input2[nbOfElements];
+			Common::randomInput(input1, input2, nbOfElements);
+
+			uint8_t output[nbOfElements];
+			while(state.KeepRunning()) {
+				simdAndNormal(input1, input2, output, nbOfElements);
+				if(performanceUtils::alwaysReturnFalse()) {
+					performanceUtils::forceUseOfVariable(output[0]);
+					performanceUtils::forceUseOfVariable(output[nbOfElements-1]);
+				}
+			}
+		}
+		BENCHMARK(SimdAndNormal)->Range(minRange, maxRange);
+
+
 		static void SimdAndForceRegisterSimd(benchmark::State& state) {
 			const size_t nbOfElements = state.range_x();
 			simdAnd_t input1[nbOfElements];
@@ -60,7 +78,6 @@ namespace SimdAnd {
 			v4uint8_t output[nbOfElements];
 			while(state.KeepRunning()) {
 				simdAndVector(input1, input2, output, nbOfElements);
-
 				if(performanceUtils::alwaysReturnFalse()) {
 					performanceUtils::forceUseOfVariable(output[0]);
 					performanceUtils::forceUseOfVariable(output[nbOfElements-1]);
@@ -68,7 +85,6 @@ namespace SimdAnd {
 			}
 		}
 		BENCHMARK(SimdAndVector)->Range(minVectorRange, maxRange);
-
 	}
 }
 

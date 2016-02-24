@@ -1,6 +1,11 @@
 cmake_minimum_required (VERSION 2.8.12)
 project (optimization-experiments)
 
+option(ENABLE_MMX "Enable MMX instructions" OFF)
+option(ENABLE_SSE "Enable SSE instructions" OFF)
+option(ENABLE_SSE2 "Enable SSE2 instructions" OFF)
+option(ENABLE_SSE3 "Enable SSE3 instructions" OFF)
+
 # Set compiler flags
 set(DEFAULT_CXX_COMPILER_OPTIONS "-Wall -Werror")
 

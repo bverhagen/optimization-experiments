@@ -4,6 +4,19 @@ project (simd-and)
 # Compilation flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
+if(ENABLE_MMX)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mmmx")
+endif()
+if(ENABLE_SSE)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse")
+endif()
+if(ENABLE_SSE)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse2")
+endif()
+if(ENABLE_SSE)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse3")
+endif()
+
 # Include paths
 include_directories(include)
 
