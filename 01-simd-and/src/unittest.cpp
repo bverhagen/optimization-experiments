@@ -34,7 +34,7 @@ namespace SimdAnd {
 
 				WHEN("We apply the straightforward AND implementation on the inputs") {
 					test_type_t actual_result[nbOfElements];
-					simdAndNormal(input1, input2, actual_result, nbOfElements);	
+					simdAnd(input1, input2, actual_result, nbOfElements);	
 					
 					THEN("We should get the same output") {
 						compareArrays(actual_result, correct_result, nbOfElements);
@@ -54,7 +54,7 @@ namespace SimdAnd {
 
 				WHEN("We apply the straightforward AND implementation on the inputs") {
 					test_type_t actual_result[nbOfElements];
-					simdAndNormal(input1, input2, actual_result, nbOfElements);
+					simdAnd(input1, input2, actual_result, nbOfElements);
 
 					THEN("We should get the same output as the random input") {
 						compareArrays(actual_result, input1, nbOfElements);
@@ -74,7 +74,7 @@ namespace SimdAnd {
 			
 				WHEN("We apply the inputs on different kinds of AND implementations") {
 					test_type_t actual_result_normal[nbOfElements];
-					simdAndNormal(input1, input2, actual_result_normal, nbOfElements);
+					simdAnd(input1, input2, actual_result_normal, nbOfElements);
 					
 					test_type_t actual_result_force_normal[nbOfElements];
 					simdAndForceNormal(input1, input2, actual_result_force_normal, nbOfElements);
@@ -96,10 +96,10 @@ namespace SimdAnd {
 			
 				WHEN("We apply the inputs on different kinds of AND implementations") {
 					test_type_t actual_result_normal[nbOfRealElements];
-					simdAndNormal((test_type_t*) input1, (test_type_t*) input2, (test_type_t*) actual_result_normal, nbOfRealElements);
+					simdAnd((test_type_t*) input1, (test_type_t*) input2, (test_type_t*) actual_result_normal, nbOfRealElements);
 
 					v4uint8_t actual_result_vector[nbOfElements];
-					simdAndVector(input1, input2, actual_result_vector, nbOfElements);
+					simdAnd(input1, input2, actual_result_vector, nbOfElements);
 					
 					THEN("The outputs should be the same") {
 						compareArrays((test_type_t*)(actual_result_vector), actual_result_normal, nbOfRealElements);

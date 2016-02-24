@@ -25,7 +25,7 @@ namespace SimdAnd {
 
 			uint8_t output[nbOfElements];
 			while(state.KeepRunning()) {
-				simdAndNormal(input1, input2, output, nbOfElements);
+				simdAnd(input1, input2, output, nbOfElements);
 				if(performanceUtils::alwaysReturnFalse()) {
 					performanceUtils::forceUseOfVariable(output);
 				}
@@ -57,7 +57,7 @@ namespace SimdAnd {
 
 			v4uint8_t output[nbOfElements];
 			while(state.KeepRunning()) {
-				simdAndVector(input1, input2, output, nbOfElements);
+				simdAnd(input1, input2, output, nbOfElements);
 				if(performanceUtils::alwaysReturnFalse()) {
 					performanceUtils::forceUseOfVariable(output);
 				}
