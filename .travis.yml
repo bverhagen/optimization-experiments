@@ -1,4 +1,6 @@
-install: apt-get install cmake python3 
+before_install:
+    - sudo apt-get -qq update
+    - sudo apt-get install -y cmake python3
 language: c++
 script: ./exec.py distclean init build --target all
 compiler: gcc
@@ -10,3 +12,5 @@ git:
 # Use sed to replace the SSH URL with the public URL, then initialize submodules
 before_install:
     - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+
+sudo: required
