@@ -3,7 +3,9 @@ before_install:
     - sudo apt-get install -y cmake python3
 language: c++
 script: ./exec.py distclean init build --target all
-compiler: gcc
+compiler: 
+    - gcc
+    - clang
 
 ## Hacks to make Travis handle git submodules properly
 # Handle git submodules yourself
