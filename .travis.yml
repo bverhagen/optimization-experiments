@@ -1,0 +1,4 @@
+install: cmake python3
+language: c++
+script: ./exec.py distclean init build --target all
+compiler: gcc
