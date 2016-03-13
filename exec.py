@@ -34,7 +34,7 @@ def main():
 		   help="Commands to execute. Possible values: {0}.".format(commandOptions))
     parser.add_argument('-m', '--mode', choices=buildModeOptions, default='release',
 		   help="Build mode to use.")
-    parser.add_argument('-t', '--target', nargs='+', choices=targetOptions, default='all',
+    parser.add_argument('-t', '--target', nargs='+', choices=targetOptions, default=['all'],
 		   help="Target to build.")
 
     args = parser.parse_args()
