@@ -2,3 +2,11 @@ install: cmake python3
 language: c++
 script: ./exec.py distclean init build --target all
 compiler: gcc
+
+## Hacks to make Travis handle git submodules properly
+# Handle git submodules yourself
+git:
+    submodules: false
+# Use sed to replace the SSH URL with the public URL, then initialize submodules
+before_install:
+    - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
