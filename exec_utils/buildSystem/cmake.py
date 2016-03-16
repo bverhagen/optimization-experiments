@@ -41,6 +41,5 @@ class Cmake:
         buildDir = getBuildDir(mode)
         print("Dist cleaning {0}".format(buildDir))
         if exists(buildDir):
-            return isSuccess(shutil.rmtree(buildDir))
-	else:
-	    return True
+            shutil.rmtree(buildDir)
+        return True

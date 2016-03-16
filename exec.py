@@ -31,7 +31,8 @@ def execute(commands, mode, targets):
         else:
             print("Error: invalid command")
             return EXIT_ERROR
-	return EXIT_SUCCESS
+
+    return EXIT_SUCCESS
 
 
 def main():

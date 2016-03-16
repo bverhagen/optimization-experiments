@@ -29,7 +29,6 @@ def executeInShell(cmd):
     pwd()
     print("Executing '{0}'".format(cmd))
     retValue = subprocess.call(cmd)
-    print("Ret value = {0}".format(retValue))
     return retValue
 
 def getAllDirs(path):
