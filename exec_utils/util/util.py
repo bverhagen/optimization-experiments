@@ -4,6 +4,7 @@ import os
 import subprocess
 
 BUILD_DIR = 'build'
+EXIT_SUCCESS = 0
 
 def getCurrentDir():
     return os.getcwd()
@@ -27,9 +28,14 @@ def getBuildDir(mode):
 def executeInShell(cmd):
     pwd()
     print("Executing '{0}'".format(cmd))
-    subprocess.call(cmd)
+    retValue = subprocess.call(cmd)
+    print("Ret value = {0}".format(retValue))
+    return retValue
 
 def getAllDirs(path):
     dirs = [x[0] for x in os.walk(path)]
     for root, dirs, files in os.walk(path):
         return dirs
+
+def isSuccess(retValue):
+    return retValue == EXIT_SUCCESS

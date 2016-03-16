@@ -1,11 +1,10 @@
 #!/usr/bin/python
 
-from ..util.util import executeInShell
+from ..util.util import executeInShell, isSuccess
 
 class Git:
     def __init__(self):
         pass
 
     def init(self):
-        executeInShell(["git","submodule", "init"])
-        executeInShell(["git","submodule", "update"])
+        return isSuccess(executeInShell(["git","submodule", "init"])) and isSuccess(executeInShell(["git","submodule", "update"]))

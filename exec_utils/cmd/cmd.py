@@ -5,16 +5,14 @@ from ..vcsSystem.vcsSystem import *
 from ..buildSystem.buildSystem import *
 
 def init(workingDir, mode):
-    initVcs()
-    initBuildSystem(workingDir, mode)
+    return initVcs() and initBuildSystem(workingDir, mode)
 
 def build(target, mode):
-    buildBuildSystem(target, mode)
+    return buildBuildSystem(target, mode)
 
 def clean(target, mode):
-    cleanBuildSystem(target, mode)
+    return cleanBuildSystem(target, mode)
 
 def distclean(mode):
-    distcleanBuildSystem(mode)
-
-    # Use python to clean python files
+    return distcleanBuildSystem(mode)
+    # TODO: Use python to clean python files
