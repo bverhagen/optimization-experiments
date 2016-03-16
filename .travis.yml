@@ -5,7 +5,7 @@ language: c++
 script: ./exec.py distclean init build --target all
 compiler: 
     - gcc
-    - clang
+#    - clang
 
 ## Hacks to make Travis handle git submodules properly
 # Handle git submodules yourself
