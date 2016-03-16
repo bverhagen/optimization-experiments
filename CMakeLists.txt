@@ -23,6 +23,15 @@ include_directories (3rdparty/benchmark/include)
 include_directories (3rdparty/Catch/single_include)
 include_directories(common/include)
 
+# Install path
+set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+set(OPTIM_INSTALL_PATH_UNITTESTS test/unittest)
+set(OPTIM_INSTALL_PATH_PERFORMANCE performance)
+
 # TODO: determine target architecture through command line option
 include_directories(common/include/i386)
 

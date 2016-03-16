@@ -27,6 +27,8 @@ include_directories(include/compiler-specific/gcc)
 
 add_executable(simd-and-performance src/performance.cpp)
 target_link_libraries (simd-and-performance common ${OPTIM_LINKER_BENCHMARK} ${OPTIM_LINKER_STD})
+install(TARGETS simd-and-performance DESTINATION ${OPTIM_INSTALL_PATH_PERFORMANCE})
 
 add_executable(simd-and-unittest src/unittest.cpp)
 target_link_libraries (simd-and-unittest common ${OPTIM_LINKER_UNITTEST} ${OPTIM_LINKER_STD})
+install(TARGETS simd-and-unittest DESTINATION ${OPTIM_INSTALL_PATH_UNITTESTS})

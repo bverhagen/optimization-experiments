@@ -23,11 +23,10 @@ class Cmake:
         buildDir = getBuildDir(mode)
         if(not target or target == 'all'):
             print("Building all targets in {0} mode".format(mode))
-            return isSuccess(executeInShell(["make", "-C", buildDir]))
         else:
             print("Building target {0} in {1} mode".format(target, mode))
             buildDir = getBuildDir(mode) + '/' + target
-            return isSuccess(executeInShell(["make", "-C", buildDir]))
+        return isSuccess(executeInShell(["make", "-C", buildDir])) and isSuccess(executeInShell(["make", "install", "-C", buildDir]))
 
     def clean(self, target, mode):
         buildDir = getBuildDir(mode)
