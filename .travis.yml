@@ -1,6 +1,9 @@
 before_install:
     - sudo apt-get -qq update
     - sudo apt-get install -y cmake python3 valgrind
+# Use sed to replace the SSH URL with the public URL, then initialize submodules
+before_install:
+    - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
 
 language: c++
 
@@ -20,10 +23,6 @@ compiler:
 # Handle git submodules yourself
 git:
     submodules: false
-
-# Use sed to replace the SSH URL with the public URL, then initialize submodules
-before_install:
-    - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
 
 # Require for apt
 sudo: required
