@@ -1,11 +1,16 @@
 before_install:
     - sudo apt-get -qq update
     - sudo apt-get install -y cmake python3
+
 language: c++
-script:
-    - ./exec.py distclean init build --target all
-    - ./exec.py distclean run --target all --run unittest
-    - ./exec.py distclean run --target all --run performance
+
+env:
+    - EXEC=distclean init build --target all
+    - EXEC=run --target all --run unittest --target all
+    - EXEC=run --target all --run performance --target all
+
+script: ./exec.py $EXEC
+
 compiler: 
     - gcc
     - clang
@@ -14,6 +19,7 @@ compiler:
 # Handle git submodules yourself
 git:
     submodules: false
+
 # Use sed to replace the SSH URL with the public URL, then initialize submodules
 before_install:
     - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
