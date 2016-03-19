@@ -21,7 +21,11 @@ endif()
 include_directories(include)
 
 # TODO determine compiler
-include_directories(include/compiler-specific/gcc)
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    include_directories(include/compiler-specific/clang)
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    include_directories(include/compiler-specific/gcc)
+endif()
 
 # Lib paths
 
