@@ -5,9 +5,9 @@ before_install:
 language: c++
 
 env:
-    - EXEC=distclean init build --target all
-    - EXEC=run --target all --run unittest --target all
-    - EXEC=run --target all --run performance --target all
+    - EXEC='distclean init build --target all'
+    - EXEC='run --target all --run unittest --target all'
+    - EXEC='run --target all --run performance --target all'
 
 script: ./exec.py $EXEC
 
