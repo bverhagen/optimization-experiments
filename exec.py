@@ -56,6 +56,10 @@ def main():
 		   help="Modes of the target to run.")
 
     args = parser.parse_args()
+    print('Commands = {0}'.format(listToString(args.commands, ' - ')))
+    print('Build mode = {0}'.format(args.mode))
+    print('Target = {0}'.format(listToString(args.target, ' - ')))
+
     sys.exit(execute(args.commands, args.mode, args.target, args.run))
 
 if __name__ == "__main__":
