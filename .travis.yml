@@ -2,7 +2,10 @@ before_install:
     - sudo apt-get -qq update
     - sudo apt-get install -y cmake python3
 language: c++
-script: ./exec.py distclean init build --target all
+script:
+    - ./exec.py distclean init build --target all
+    - ./exec.py distclean run --target all --run unittest
+    - ./exec.py distclean run --target all --run performance
 compiler: 
     - gcc
     - clang
