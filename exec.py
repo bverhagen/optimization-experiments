@@ -9,7 +9,7 @@ import sys
 EXIT_SUCCESS = 0
 EXIT_ERROR = 1
 
-def execute(commands, mode, targets, runTargets):
+def execute(commands, mode, targets, runTargets, valgrind):
     for command in commands:
         if(command == 'init'):
             if not init(getCurrentDir(), mode):
@@ -29,7 +29,7 @@ def execute(commands, mode, targets, runTargets):
             if not execute(['clean', 'build'], mode, targets):
                 return EXIT_ERROR
         elif(command == 'run'):
-            if not run(targets, mode, runTargets):
+            if not run(targets, mode, runTargets, valgrind):
                 return EXIT_ERROR
         else:
             print("Error: invalid command")
@@ -54,13 +54,14 @@ def main():
 		   help="Target to build.")
     parser.add_argument('-r', '--run', nargs='+', choices=runTargetOptions, default=['all'],
 		   help="Modes of the target to run.")
+    parser.add_argument('-w', '--valgrind', action='store_true', help="Enable valgrind memcheck. Only applicable on the run command")
 
     args = parser.parse_args()
     print('Commands = {0}'.format(listToString(args.commands, ' - ')))
     print('Build mode = {0}'.format(args.mode))
     print('Target = {0}'.format(listToString(args.target, ' - ')))
 
-    sys.exit(execute(args.commands, args.mode, args.target, args.run))
+    sys.exit(execute(args.commands, args.mode, args.target, args.run, args.valgrind))
 
 if __name__ == "__main__":
     main()

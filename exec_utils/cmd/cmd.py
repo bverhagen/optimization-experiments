@@ -18,5 +18,5 @@ def distclean(mode):
     return distcleanBuildSystem(mode)
     # TODO: Use python to clean python files
 
-def run(target, mode, runTargets):
-    return runner(target, mode, runTargets)
+def run(target, mode, runTargets, valgrind):
+    return runner(target, mode, runTargets, valgrind)

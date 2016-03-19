@@ -2,35 +2,38 @@
 
 from ..util.util import *
 
-def runTarget(target, buildDir, suffix = ''):
+def runTarget(target, buildDir, valgrind, suffix = ''):
     if(not target or target == 'all'):
         files = getAllFiles(buildDir)
         for entry in files:
-            if not runTarget(entry, buildDir):
+            if not runTarget(entry, buildDir, valgrind):
                 return False
         return True
     else:
-        cmd = [buildDir + '/' + target + suffix]
+        cmd = []
+        if valgrind:
+            cmd.extend(['valgrind', '--tool=memcheck'])
+        cmd.extend([buildDir + '/' + target + suffix])
     return executeInShell(cmd)
 
-def runUnittest(target, mode):
+def runUnittest(target, mode, valgrind):
     buildDir = getUnittestDir(mode)
-    runTarget(target, buildDir, '-unittest')
+    runTarget(target, buildDir, valgrind, '-unittest')
 
-def runPerformanceTest(target, mode):
+def runPerformanceTest(target, mode, valgrind):
     buildDir = getPerformancetestDir(mode)
-    runTarget(target, buildDir, '-performance')
+    runTarget(target, buildDir, valgrind, '-performance')
 
-def runner(targets, mode, runTargets):
+def runner(targets, mode, runTargets, valgrind):
     for target in targets:
         for runTarget in runTargets:
             if(runTarget == 'unittest'):
-                runUnittest(target, mode)
+                runUnittest(target, mode, valgrind)
             elif(runTarget == 'performance'):
-                runPerformanceTest(target, mode)
+                runPerformanceTest(target, mode, valgrind)
             elif(runTarget == 'all'):
-                runUnittest(target, mode)
-                runPerformanceTest(target, mode)
+                runUnittest(target, mode, valgrind)
+                runPerformanceTest(target, mode, valgrind)
             else:
                 print("Invalid run target!")
                 return False
