@@ -17,7 +17,7 @@ class Cmake:
         goToDir(buildPath)
         retValue = executeInShell(["cmake", modeFlag, "../.."])
         goToDir(workingDir)
-	return isSuccess(retValue)
+        return isSuccess(retValue)
 
     def build(self, target, mode):
         buildDir = getBuildDir(mode)

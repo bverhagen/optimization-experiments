@@ -9,25 +9,28 @@ import sys
 EXIT_SUCCESS = 0
 EXIT_ERROR = 1
 
-def execute(commands, mode, targets):
+def execute(commands, mode, targets, runTargets):
     for command in commands:
         if(command == 'init'):
             if not init(getCurrentDir(), mode):
-		return EXIT_ERROR
+                return EXIT_ERROR
         elif(command == 'build'):
             for target in targets:
                 if not build(target, mode):
-			return EXIT_ERROR
+                    return EXIT_ERROR
         elif(command == 'clean'):
             for target in targets:
                 if not clean(target, mode):
-			return EXIT_ERROR
+                    return EXIT_ERROR
         elif(command == 'distclean'):
             if not distclean(mode):
-		return EXIT_ERROR
+                return EXIT_ERROR
         elif(command == 'rebuild'):
             if not execute(['clean', 'build'], mode, targets):
-		return EXIT_ERROR
+                return EXIT_ERROR
+        elif(command == 'run'):
+            if not run(targets, mode, runTargets):
+                return EXIT_ERROR
         else:
             print("Error: invalid command")
             return EXIT_ERROR
@@ -36,10 +39,11 @@ def execute(commands, mode, targets):
 
 
 def main():
-    commandOptions = ['init', 'build', 'clean', 'distclean', 'rebuild']
+    commandOptions = ['init', 'build', 'clean', 'distclean', 'rebuild', 'run']
     buildModeOptions = ['debug', 'release']
     targetOptions = getAllDirs(getCurrentDir())
     targetOptions.append('all')
+    runTargetOptions = ['unittest', 'performance', 'all']
 
     parser = argparse.ArgumentParser(description='Convenience script for executing commands')
     parser.add_argument('commands', metavar='commands', nargs='+', choices=commandOptions,
@@ -48,9 +52,11 @@ def main():
 		   help="Build mode to use.")
     parser.add_argument('-t', '--target', nargs='+', choices=targetOptions, default=['all'],
 		   help="Target to build.")
+    parser.add_argument('-r', '--run', nargs='+', choices=runTargetOptions, default=['all'],
+		   help="Modes of the target to run.")
 
     args = parser.parse_args()
-    sys.exit(execute(args.commands, args.mode, args.target))
+    sys.exit(execute(args.commands, args.mode, args.target, args.run))
 
 if __name__ == "__main__":
     main()

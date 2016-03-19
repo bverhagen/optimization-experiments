@@ -3,6 +3,7 @@
 from ..util.util import executeInShell
 from ..vcsSystem.vcsSystem import *
 from ..buildSystem.buildSystem import *
+from ..runner.runner import *
 
 def init(workingDir, mode):
     return initVcs() and initBuildSystem(workingDir, mode)
@@ -16,3 +17,6 @@ def clean(target, mode):
 def distclean(mode):
     return distcleanBuildSystem(mode)
     # TODO: Use python to clean python files
+
+def run(target, mode, runTargets):
+    return runner(target, mode, runTargets)
