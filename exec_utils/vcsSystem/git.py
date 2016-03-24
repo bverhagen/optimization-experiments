@@ -7,4 +7,4 @@ class Git:
         pass
 
     def init(self):
-        return isSuccess(executeInShell(["git","submodule", "init", "--depth", "1"])) and isSuccess(executeInShell(["git","submodule", "update"]))
+        return isSuccess(executeInShell(["git","submodule", "init"])) and isSuccess(executeInShell(["git","submodule", "update", "--depth", "1"]))
