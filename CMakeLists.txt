@@ -9,7 +9,7 @@ option(ENABLE_SSE3 "Enable SSE3 instructions" OFF)
 # Set compiler flags
 set(DEFAULT_CXX_COMPILER_OPTIONS "-Wall -Werror")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DEFAULT_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DEFAULT_CXX_FLAGS} -save-temps -fverbose-asm")    # Since this project is about micro benchmarks, enable assembler output by default
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 
