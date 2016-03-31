@@ -29,7 +29,12 @@ endif()
 
 # Lib paths
 
-add_executable(simd-and-performance src/performance.cpp)
+# Files
+set(PERFORMANCE_FILES   src/benchmark-simd-and-normal.cpp
+                        src/benchmark-simd-and-force-normal.cpp
+                        src/benchmark-simd-and-vector.cpp)
+
+add_executable(simd-and-performance ${PERFORMANCE_FILES})
 target_link_libraries (simd-and-performance common ${OPTIM_LINKER_BENCHMARK} ${OPTIM_LINKER_STD})
 install(TARGETS simd-and-performance DESTINATION ${OPTIM_INSTALL_PATH_PERFORMANCE})
 
