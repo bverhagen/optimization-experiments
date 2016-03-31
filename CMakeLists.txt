@@ -14,7 +14,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 
 # Set linker flags
-set(OPTIM_LINKER_BENCHMARK benchmark pthread)
+set(OPTIM_LINKER_BENCHMARK benchmark performance pthread)
 set(OPTIM_LINKER_UNITTEST catch)
 set(OPTIM_LINKER_STD c rt)
 
@@ -37,6 +37,7 @@ include_directories(common/include/i386)
 
 add_subdirectory(3rdparty)
 add_subdirectory(catch)
+add_subdirectory(performance)
 add_subdirectory(common)
 add_subdirectory(00-benchmark)
 add_subdirectory(simd-and)

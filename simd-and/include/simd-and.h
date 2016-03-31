@@ -19,7 +19,7 @@ namespace SimdAnd {
 	inline void simdAndForceNormal(const T* const input1, const T* const input2, T* const output, std::size_t nbOfElements) noexcept {
 		for(std::size_t i = 0; i < nbOfElements; ++i) {
 			output[i] = input1[i] & input2[i];
-			if(performanceUtils::alwaysReturnFalse()) {
+			if(unlikely(performanceUtils::alwaysReturnFalse())) {
 				performanceUtils::forceUseOfVariable(output[i]);
 			}
 		}
