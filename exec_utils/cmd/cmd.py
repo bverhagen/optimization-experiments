@@ -8,11 +8,11 @@ from ..runner.runner import *
 def init(workingDir, mode):
     return initVcs() and initBuildSystem(workingDir, mode)
 
-def build(target, mode):
-    return buildBuildSystem(target, mode)
+def build(target, mode, verbose):
+    return buildBuildSystem(target, mode, verbose)
 
-def clean(target, mode):
-    return cleanBuildSystem(target, mode)
+def clean(target, mode, verbose):
+    return cleanBuildSystem(target, mode, verbose)
 
 def distclean(mode):
     return distcleanBuildSystem(mode)

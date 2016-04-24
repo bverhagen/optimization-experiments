@@ -9,24 +9,24 @@ import sys
 EXIT_SUCCESS = 0
 EXIT_ERROR = 1
 
-def execute(commands, mode, targets, runTargets, valgrind):
+def execute(commands, mode, targets, runTargets, valgrind, verbose):
     for command in commands:
         if(command == 'init'):
             if not init(getCurrentDir(), mode):
                 return EXIT_ERROR
         elif(command == 'build'):
             for target in targets:
-                if not build(target, mode):
+                if not build(target, mode, verbose):
                     return EXIT_ERROR
         elif(command == 'clean'):
             for target in targets:
-                if not clean(target, mode):
+                if not clean(target, mode, verbose):
                     return EXIT_ERROR
         elif(command == 'distclean'):
             if not distclean(mode):
                 return EXIT_ERROR
         elif(command == 'rebuild'):
-            if not execute(['clean', 'build'], mode, targets):
+            if not execute(['clean', 'build'], mode, targets, valgrind, verbose):
                 return EXIT_ERROR
         elif(command == 'run'):
             if not run(targets, mode, runTargets, valgrind):
@@ -55,13 +55,14 @@ def main():
     parser.add_argument('-r', '--run', nargs='+', choices=runTargetOptions, default=['all'],
 		   help="Modes of the target to run.")
     parser.add_argument('-w', '--valgrind', action='store_true', help="Enable valgrind memcheck. Only applicable on the run command")
+    parser.add_argument('-v', '--verbose-make', action='store_true', help="Enable make in verbose mode")
 
     args = parser.parse_args()
     print('Commands = {0}'.format(listToString(args.commands, ' - ')))
     print('Build mode = {0}'.format(args.mode))
     print('Target = {0}'.format(listToString(args.target, ' - ')))
 
-    sys.exit(execute(args.commands, args.mode, args.target, args.run, args.valgrind))
+    sys.exit(execute(args.commands, args.mode, args.target, args.run, args.valgrind, args.verbose_make))
 
 if __name__ == "__main__":
     main()
