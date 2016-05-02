@@ -1,8 +1,9 @@
 #!/usr/bin/python
 
 from .cmake import Cmake
+from .b2 import B2
 
-buildSystem = Cmake()
+buildSystem = B2()
 
 def initBuildSystem(workingDir, mode):
     return buildSystem.init(workingDir, mode)

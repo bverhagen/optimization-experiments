@@ -1,0 +1,12 @@
+project performance     : requirements  <include>../3rdparty/benchmark/include
+                        : usage-requirements <include>../3rdparty/benchmark/include
+                                             <linkflags>-lpthread
+                                             <library>/3rdparty//benchmark-lib
+                        ;
+
+
+alias benchmark-lib : /3rdparty//benchmark-lib ;
+
+lib performance : performance.cpp benchmark-lib
+          : <link>static 
+          ;

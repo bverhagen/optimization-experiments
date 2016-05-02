@@ -16,7 +16,7 @@ namespace {
 	template<typename T>
 	void compareArrays(const T* const actual, const T* const correct, size_t nbOfElements) {
 		for(size_t i = 0; i < nbOfElements; ++i) {
-			REQUIRE(actual[i] == correct[i]);
+			REQUIRE((actual[i] == correct[i]));
 		}
 	}
 }

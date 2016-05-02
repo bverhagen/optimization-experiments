@@ -1,0 +1,10 @@
+project simd-and    : requirements <include>include
+                                   <include>include/compiler-specific/gcc 
+                    : usage-requirements <include>include
+                    ;
+
+exe simd-and-unittest    : src/unittest.cpp /unittest-lib /common
+                         ;
+
+exe simd-and-performance : [ glob src/benchmark*.cpp ] /common /performance
+                         ;

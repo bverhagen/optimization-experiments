@@ -1,0 +1,9 @@
+project catch   :
+                : usage-requirements <include>../3rdparty/Catch/include
+                ;
+
+
+lib catch : catch.cpp
+          : <include>../3rdparty/Catch/include
+            <link>static 
+          ;

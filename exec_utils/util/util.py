@@ -25,6 +25,9 @@ def goToDir(path):
 def pwd():
     print("Current working dir: {0}".format(getCurrentDir()))
 
+def getBuildDirWithoutMode():
+    return BUILD_DIR
+
 def getBuildDir(mode):
     return BUILD_DIR + '/' + mode
 
@@ -34,10 +37,10 @@ def getUnittestDir(mode):
 def getPerformancetestDir(mode):
     return getBuildDir(mode) + '/bin/performance'
 
-def executeInShell(cmd):
+def executeInShell(cmd, working_directory = '.'):
     pwd()
-    print("Executing '{0}'".format(listToString(cmd, ' ')))
-    retValue = subprocess.call(cmd)
+    print("Executing '{0}' in '{1}'".format(listToString(cmd, ' '), working_directory))
+    retValue = subprocess.call(cmd, cwd = working_directory)
     return retValue
 
 def getAllDirs(path):

@@ -28,9 +28,9 @@
 *.app
 
 # Build directories
-debug
-release
-build
+*/debug/*
+*/release/*
+build/*
 
 # vim swp files
 *.swp

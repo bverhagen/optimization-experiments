@@ -1,0 +1,19 @@
+project 3rdparty    :
+                    ;
+
+make benchmark/build/src/libbenchmark.a : benchmark/include/benchmark/benchmark_api.h : @buildBenchmark
+                                        : <link>static
+                                        ;
+
+actions buildBenchmark
+{
+    echo "Building lib benchmark..."
+    mkdir -p 3rdparty/benchmark/build
+    cd 3rdparty/benchmark/build
+    cmake -DCMAKE_BUILD_TYPE=release ..
+    make -j
+    cd ../../..
+    cp 3rdparty/benchmark/build/src/libbenchmark.a $(<)
+} 
+
+alias benchmark-lib : benchmark/build/src/libbenchmark.a ;

@@ -1,0 +1,11 @@
+project 
+    : usage-requirements    <include>include 
+                            <include>include/amd64
+    ;
+
+
+lib common  : [ glob src/*.cpp ]
+            :   <include>include 
+                <include>include/amd64
+                <link>static
+            ;

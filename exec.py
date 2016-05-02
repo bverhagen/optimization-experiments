@@ -42,7 +42,7 @@ def main():
     commandOptions = ['init', 'build', 'clean', 'distclean', 'rebuild', 'run']
     buildModeOptions = ['debug', 'release']
     targetOptions = getAllDirs(getCurrentDir())
-    targetOptions.append('all')
+    targetOptions.extend(['all', 'unittest', 'performance'])
     runTargetOptions = ['unittest', 'performance', 'all']
 
     parser = argparse.ArgumentParser(description='Convenience script for executing commands')
