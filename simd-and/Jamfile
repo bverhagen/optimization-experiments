@@ -3,7 +3,7 @@ project simd-and    : requirements <include>include
                     : usage-requirements <include>include
                     ;
 
-exe simd-and-unittest    : src/unittest.cpp /unittest-lib /common
+exe simd-and-unittest    : src/unittest.cpp /common /unittest-lib
                          ;
 
 exe simd-and-performance : [ glob src/benchmark*.cpp ] /common /performance

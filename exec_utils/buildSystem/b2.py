@@ -63,14 +63,8 @@ class B2:
         return isSuccess(executeInShell(clean_command))
 
     def distclean(self, mode):
-        command = self.getBuildCommand()
-        command.append('--clean-all')
-        command.append(mode)
-
         buildDir = getBuildDirWithoutMode()
-
         print("Dist cleaning {0}".format(buildDir))
-        executeInShell(command)
 
         if exists(buildDir):
             shutil.rmtree(buildDir)
