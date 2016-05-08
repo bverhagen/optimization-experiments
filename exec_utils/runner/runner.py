@@ -2,11 +2,11 @@
 
 from ..util.util import *
 
-def runTarget(target, buildDir, valgrind, suffix = ''):
+def runTarget(target, mode, buildDir, valgrind, suffix = ''):
     if(not target or target == 'all'):
         files = getAllFiles(buildDir)
         for entry in files:
-            if not runTarget(entry, buildDir, valgrind):
+            if not runTarget(entry, mode, buildDir, valgrind):
                 return False
         return True
     else:
@@ -18,11 +18,11 @@ def runTarget(target, buildDir, valgrind, suffix = ''):
 
 def runUnittest(target, mode, valgrind):
     buildDir = getUnittestDir(mode)
-    runTarget(target, buildDir, valgrind, '-unittest')
+    runTarget(target, mode, buildDir, valgrind, '-unittest')
 
 def runPerformanceTest(target, mode, valgrind):
     buildDir = getPerformancetestDir(mode)
-    runTarget(target, buildDir, valgrind, '-performance')
+    runTarget(target, mode, buildDir, valgrind, '-performance')
 
 def runner(targets, mode, runTargets, valgrind):
     for target in targets:

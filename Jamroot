@@ -9,6 +9,12 @@ use-project /performance : performance ;
 use-project /common : common ;
 use-project /simd-and : simd-and ;
 
-alias unittest : /simd-and//simd-and-unittest ;
-alias performance : /simd-and//simd-and-performance ;
+install unittest : /simd-and//simd-and-unittest
+                 : <variant>release:<location>bin/release/test/unittest
+                   <variant>debug:<location>bin/debug/test/unittest
+                 ;
 
+install performance  : /simd-and//simd-and-performance
+                     : <variant>release:<location>bin/release/performance
+                       <variant>debug:<location>bin/debug/performance
+                     ;

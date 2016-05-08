@@ -4,6 +4,7 @@ import os
 import subprocess
 
 BUILD_DIR = 'build'
+BIN_DIR = 'bin'
 EXIT_SUCCESS = 0
 
 def listToString(list, separator):
@@ -31,11 +32,14 @@ def getBuildDirWithoutMode():
 def getBuildDir(mode):
     return BUILD_DIR + '/' + mode
 
+def getBinDir(mode):
+    return BIN_DIR + '/' + mode
+
 def getUnittestDir(mode):
-    return getBuildDir(mode) + '/bin/test/unittest'
+    return 'bin/' + mode + '/test/unittest'
 
 def getPerformancetestDir(mode):
-    return getBuildDir(mode) + '/bin/performance'
+    return 'bin/' + mode + '/performance'
 
 def executeInShell(cmd, working_directory = '.'):
     pwd()

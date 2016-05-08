@@ -68,4 +68,9 @@ class B2:
 
         if exists(buildDir):
             shutil.rmtree(buildDir)
+
+        binDir = getBinDir(mode)
+        print("Dist cleaning {0}".format(binDir))
+        if exists(binDir):
+            shutil.rmtree(binDir)
         return True
