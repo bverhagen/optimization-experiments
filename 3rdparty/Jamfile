@@ -1,9 +1,27 @@
 project 3rdparty    :
                     ;
 
+import notfile ;
+
+notfile benchmark.commit : @submodulecommit benchmark ;
+
+make benchmark/include/benchmark/benchmark_api.h : benchmark.commit : @downloadSubModule ;
+
 make benchmark/build/src/libbenchmark.a : benchmark/include/benchmark/benchmark_api.h : @buildBenchmark
                                         : <link>static
                                         ;
+rule submodulecommit ( name )
+{
+    echo $(name)
+    mkdir -p build/3rdparty/submodules
+    [ SHELL  git submodule status | grep benchmark | sed "s/-//g" | sed "s/^ //g" | cut -f 1 -d " " > build/3rdparty/submodules/benchmark.commit ] ;
+}
+
+actions downloadSubModule
+{
+    git submodule init 3rdparty/benchmark
+    git submodule update
+}
 
 actions buildBenchmark
 {
