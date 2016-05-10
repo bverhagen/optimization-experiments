@@ -1,7 +1,36 @@
 project 3rdparty    :
                     ;
 
-make benchmark/build/src/libbenchmark.a : benchmark/include/benchmark/benchmark_api.h : @buildBenchmark
+import notfile ;
+
+rule git-submodule ( name : extra-sources * : requirements * )
+{
+    git-submodule-commit $(name).commit ;
+    make $(name) : $(name).commit : @download-submodule ;
+}
+
+actions download-submodule
+{
+    "3rdparty/getSubmodule.sh" "$(>)" "$(<)" 
+}
+
+rule git-submodule-commit ( name : extra-sources * : requirements * )
+{
+    notfile $(name) : @submodulecommit ;
+}
+
+actions submodulecommit
+{
+     3rdparty/getSubmoduleCommit.sh "$(<)"
+}
+
+
+
+
+
+
+git-submodule benchmark.submodule ;
+make benchmark/build/src/libbenchmark.a : benchmark.submodule : @buildBenchmark
                                         : <link>static
                                         ;
 
