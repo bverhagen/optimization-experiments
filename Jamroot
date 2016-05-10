@@ -1,7 +1,15 @@
 project optimization : build-dir build ;
 
-using gcc : c++11 : "g++" : <cxxflags>-std=c++11 ;
-using clang : c++11 : "g++" : <cxxflags>-std=c++11 ;
+using gcc : c++11 : "g++" : <cxxflags>-std=c++11 
+                            <cxxflags>-Werror
+                            <cxxflags>-save-temps 
+                            <cxxflags>-fverbose-asm 
+                  ;
+using clang : c++11 : "clang++" :   <cxxflags>-std=c++11
+                                    <cxxflags>-msse2 
+                                    <cxxflags>-save-temps 
+                                    <cxxflags>-fverbose-asm 
+                  ;
 
 use-project /3rdparty : 3rdparty ;
 use-project /unittest-lib : catch ;

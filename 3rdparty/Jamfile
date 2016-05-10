@@ -10,7 +10,7 @@ actions buildBenchmark
     echo "Building lib benchmark..."
     mkdir -p 3rdparty/benchmark/build
     cd 3rdparty/benchmark/build
-    cmake -DCMAKE_BUILD_TYPE=release ..
+    cmake -DCMAKE_BUILD_TYPE=release -DBENCHMARK_ENABLE_TESTING=OFF -DBENCHMARK_ENABLE_LTO=OFF ..
     make -j
     cd ../../..
     cp 3rdparty/benchmark/build/src/libbenchmark.a $(<)
