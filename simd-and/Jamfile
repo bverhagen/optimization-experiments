@@ -6,5 +6,5 @@ project simd-and    : requirements <include>include
 exe simd-and-unittest   : src/unittest.cpp /common /unittest-lib
                         ;
 
-exe simd-and-performance : [ glob src/benchmark*.cpp ] /common /performance
+exe simd-and-performance : [ glob src/benchmark*.cpp ] [ glob include/*.h ] /common /performance
                          ;

@@ -4,7 +4,10 @@ project
     ;
 
 
-lib common  : [ glob src/*.cpp ]
+lib common  :   [ glob src/*.cpp ] 
+                [ glob include/*.h ] 
+                [ glob include/amd64/*.h ] 
+                [ glob include/i386/*.h ]
             :   <include>include 
                 <include>include/amd64
                 <link>static
