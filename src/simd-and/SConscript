@@ -1,7 +1,7 @@
 Import('env')
 
 import copy
-import my_utils
+import buildTools
 
 includes = [
     'include',
@@ -22,9 +22,9 @@ libs_path = [
 ]
 
 sources = ['src/unittest.cpp']
-unittest = my_utils.createUnittest(env, 'simd-and-unittest', sources, includes, libs, libs_path)
+unittest = buildTools.createUnittest(env, 'simd-and-unittest', sources, includes, libs, libs_path)
 bin = env.Alias("simd-and", unittest)
 
 sources = Glob('src/benchmark-*.cpp')
-benchmark = my_utils.createBenchmark(env, 'simd-and-benchmark', sources, includes, libs, libs_path)
+benchmark = buildTools.createBenchmark(env, 'simd-and-benchmark', sources, includes, libs, libs_path)
 env.Alias("simd-and", benchmark)

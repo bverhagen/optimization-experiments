@@ -1,7 +1,7 @@
 import os
 opts = Variables()
 
-import my_utils
+import setupTools
 
 map_logLevel_to_define = {
     'debug' : 'LOG_LEVEL_DEBUG',
@@ -45,7 +45,6 @@ opts.Add(EnumVariable('multithreading', 'Set multithreading', 'none',
 
 # Tools
 tools_list = [
-	# default tools
 	'default',
 ]
 
@@ -56,7 +55,7 @@ Export('env')
 #toolchainPrefix = env['toolchainPrefix']
 #toolchainPath = env['toolchainPath']
 
-my_utils.setupToolchain(env, env['compiler'], env['toolchainPrefix'], env['toolchainPath'])
+setupTools.setupToolchain(env, env['compiler'], env['toolchainPrefix'], env['toolchainPath'])
 
 toolchain = env['COMPILER_NAME']
 
@@ -81,7 +80,8 @@ env['THIRD_PARTY_INCLUDE_DIR'] = '{thirdpartyBuildDir}/include'.format(thirdpart
 env['THIRD_PARTY_LIBS_DIR'] = '{thirdpartyBuildDir}/libs'.format(thirdpartyBuildDir=thirdpartyBuildDir)
 env['LIBS_DIR'] = '{buildDir}/libs'.format(buildDir = buildDir)
 env['BIN_DIR'] = '{buildDir}/bin'.format(buildDir = buildDir)
-env['TEST_BIN_DIR'] = '{bindir}/test'.format(bindir = env['BIN_DIR'])
+env['UNITTEST_BIN_DIR'] = '{bindir}/test/unittest'.format(bindir = env['BIN_DIR'])
+env['BENCHMARK_BIN_DIR'] = '{bindir}/benchmark'.format(bindir = env['BIN_DIR'])
 
 env['UNITTEST_LIBS'] = [ 'catch' ]
 env['THIRDPARTY_BENCHMARK_LIB'] = [ 'benchmark', 'pthread' ]
@@ -110,6 +110,8 @@ if env['mode'] == 'release':
     env['CPPFLAGS'].append(['-O3', '-g'])
 else:
     env['CPPFLAGS'].append(['-g', '-O0'])
+
+env['STD_LIBS'] = setupTools.getStdLibs(env['COMPILER_FAMILY'])
 
 ##################################### Profiling related stuff ##############################
 # Default when profiling is enabled: perf
@@ -142,13 +144,6 @@ if env['multithreading'] == 'openmp':
     # Suppress mangling va thing
 #    env['CPPFLAGS'].append('-Wno-psabi')
 
-################################## Other stuff ##############################
-env['STD_LIBS'] = [
-	'rt',
-    'm',
-    'dl',
-    'stdc++'
-]
 
 ################################## Print stuff ###############################
 print("Building in {buildDir}".format(buildDir=buildDir))

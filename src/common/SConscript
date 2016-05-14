@@ -1,14 +1,14 @@
 Import('env')
 
+import buildTools
+
 sources = Glob('src/*.cpp')
 
-env['LIB_COMMON_INCLUDES'] = [
+includeUsageRequirements = [
     '{rootDir}/common/include'.format(rootDir = env['BUILD_DIR']),
     '{rootDir}/common/include/amd64'.format(rootDir = env['BUILD_DIR']),
 ]
-env['CPPPATH'].extend(env['LIB_COMMON_INCLUDES'])
 
-lib = env.Library('common', sources)
-installed_lib = env.Install("{libs_dir}".format(libs_dir=env['LIBS_DIR']), lib)
-#env.Alias('common', installed_lib)
-env.Alias('buildLibs', installed_lib)
+includes = includeUsageRequirements
+
+buildTools.createLib(env, 'common', sources, includes, includeUsageRequirements)

@@ -2,53 +2,8 @@ import copy     # For some reason importing this does not work
 
 from SCons.Script import *
 
-
-x64_compiler_path = Dir('/usr/bin').abspath
-armv6_compiler_path = Dir('toolchains/arm-bcm2708hardfp-linux-gnueabi/bin').abspath
-
-map_c_to_cxx = {
-    'gcc' : 'g++',
-    'clang' : 'clang++'
-}
-
-map_arch_to_toolchain_path = {
-    '' : x64_compiler_path,
-    'arm-bcm2708hardfp-linux-gnueabi-' : armv6_compiler_path
-}
-
 def listToString(list, separator):
     return separator.join(list)
-
-def setupToolchain(env, compiler, toolchainPrefix = None, toolchainPath = None):
-    toolchain = ''
-    compilerName = ''
-    if toolchainPath:
-        toolchain = toolchain + toolchainPath + '/'
-
-    if toolchainPrefix:
-        toolchain = toolchain + toolchainPrefix + '-'
-        compilerName = toolchainPrefix + '-'
-
-    # Define generally available environment variables
-    env['COMPILER_NAME'] = compilerName + compiler
-    env['COMPILER_FAMILY'] = compiler
-    env['CC'] = toolchain + compiler
-
-    if compiler == 'gcc':
-        env['CXX'] = toolchain + 'g++'
-        env['AR'] = toolchain + 'ar' 
-        env['AS'] = toolchain + 'as' 
-        env['LD'] = toolchain + 'ld'
-        env['NM'] = toolchain + 'nm' 
-        env['STRIP'] = toolchain + 'strip' 
-
-    elif compiler == 'clang':
-        env['CXX'] = toolchain + 'clang++'
-
-    print("Toolchain: " + toolchain)
-    print("C Compiler: " + env['CC'])
-    print("CXX Compiler: " + env['CXX'])
-
 
 def buildCmake(env, output, sources, cmakeRootDir, buildDir, cmakeOptions, outputAfterCmakeBuild):
     return env.Command(output, sources, 
@@ -56,6 +11,7 @@ def buildCmake(env, output, sources, cmakeRootDir, buildDir, cmakeOptions, outpu
         'echo "Building ' + output + '"',
         'mkdir -p ' + buildDir,
         'cmake -B' + buildDir + ' ' + '-H' + cmakeRootDir +' ' + 
+            '-DCMAKE_BUILD_TYPE=Release ' +
             listToString(cmakeOptions, ' ') +
             '-DCMAKE_C_COMPILER=' + env['CC'] + ' ' +
             '-DCMAKE_CXX_COMPILER=' + env['CXX'],
@@ -63,8 +19,16 @@ def buildCmake(env, output, sources, cmakeRootDir, buildDir, cmakeOptions, outpu
         'cp ' + buildDir + '/' + outputAfterCmakeBuild + ' $TARGET'
     ])
 
-def generateIncludeUsageRequirementName(lib):
-    return 'LIB_' + lib.upper() + '_INCLUDES'
+def generateIncludeUsageRequirementName(libName):
+    return 'LIB_' + libName.upper() + '_INCLUDES'
+
+def createIncludeUsageRequirement(env, libName, includes):
+    lib_include_requirements_name = generateIncludeUsageRequirementName(libName)
+
+    if lib_include_requirements_name in env: 
+        env[lib_include_requirements_name].extend(includes)
+    else:
+        env[lib_include_requirements_name] = includes
 
 def addIncludeUsageRequirement(env, lib, toAdd):
     lib_include_requirements_name = generateIncludeUsageRequirementName(lib)
@@ -84,7 +48,7 @@ def createUnittest(env, name, sources, includes, libs, libs_path):
         addIncludeUsageRequirement(env_unittest, lib, env_unittest['CPPPATH'])
 
     target = env_unittest.Program(name, sources, LIBS=libs_unittest, LIBPATH=libs_path)
-    installed_bin = env.Install("{bin_dir}".format(bin_dir=env['BIN_DIR']), target)
+    installed_bin = env.Install("{bin_dir}".format(bin_dir=env['UNITTEST_BIN_DIR']), target)
     env.Alias(name, installed_bin)
     env.Alias("unittests", installed_bin)
     return installed_bin
@@ -102,7 +66,18 @@ def createBenchmark(env, name, sources, includes, libs, libs_path):
         addIncludeUsageRequirement(env_benchmark, lib, env_benchmark['CPPPATH'])
 
     target = env_benchmark.Program(name, sources, LIBS=libs_benchmark, LIBPATH=libs_path)
-    installed_bin = env.Install("{bin_dir}".format(bin_dir=env['BIN_DIR']), target)
+    installed_bin = env.Install("{bin_dir}".format(bin_dir=env['BENCHMARK_BIN_DIR']), target)
     env.Alias(name, installed_bin)
     env.Alias("benchmarks", installed_bin)
     return installed_bin
+
+def createLib(env, name, sources, includes, includeUsageRequirements):
+    createIncludeUsageRequirement(env, name, includeUsageRequirements)
+
+    env_lib = env.Clone()
+    env_lib['CPPPATH'].extend(includes)
+
+    lib = env_lib.Library(name, sources)
+    installed_lib = env.Install("{libs_dir}".format(libs_dir=env['LIBS_DIR']), lib)
+    env.Alias(name, installed_lib)
+    env.Alias('buildLibs', installed_lib)

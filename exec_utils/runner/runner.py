@@ -16,24 +16,24 @@ def runTarget(target, mode, buildDir, valgrind, suffix = ''):
         cmd.extend([buildDir + '/' + target + suffix])
     return executeInShell(cmd)
 
-def runUnittest(target, mode, valgrind):
-    buildDir = getUnittestDir(mode)
+def runUnittest(target, mode, compiler, valgrind):
+    buildDir = getUnittestDir(mode, compiler)
     runTarget(target, mode, buildDir, valgrind, '-unittest')
 
-def runPerformanceTest(target, mode, valgrind):
-    buildDir = getPerformancetestDir(mode)
-    runTarget(target, mode, buildDir, valgrind, '-performance')
+def runPerformanceTest(target, mode, compiler, valgrind):
+    buildDir = getPerformancetestDir(mode, compiler)
+    runTarget(target, mode, buildDir, valgrind, '-benchmark')
 
-def runner(targets, mode, runTargets, valgrind):
+def runner(targets, mode, runTargets, compiler, valgrind):
     for target in targets:
         for runTarget in runTargets:
             if(runTarget == 'unittest'):
-                runUnittest(target, mode, valgrind)
+                runUnittest(target, mode, compiler, valgrind)
             elif(runTarget == 'performance'):
-                runPerformanceTest(target, mode, valgrind)
+                runPerformanceTest(target, mode, compiler, valgrind)
             elif(runTarget == 'all'):
-                runUnittest(target, mode, valgrind)
-                runPerformanceTest(target, mode, valgrind)
+                runUnittest(target, mode, compiler, valgrind)
+                runPerformanceTest(target, mode, compiler, valgrind)
             else:
                 print("Invalid run target!")
                 return False

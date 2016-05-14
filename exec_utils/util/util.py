@@ -35,11 +35,11 @@ def getBuildDir(mode, compiler):
 def getBinDir(mode):
     return BIN_DIR + '/' + mode
 
-def getUnittestDir(mode):
-    return 'bin/' + mode + '/test/unittest'
+def getUnittestDir(mode, compiler):
+    return getBuildDir(mode, compiler) + '/bin/test/unittest'
 
-def getPerformancetestDir(mode):
-    return 'bin/' + mode + '/performance'
+def getPerformancetestDir(mode, compiler):
+    return getBuildDir(mode, compiler) + '/bin/benchmark'
 
 def executeInShell(cmd, working_directory = '.'):
     pwd()
