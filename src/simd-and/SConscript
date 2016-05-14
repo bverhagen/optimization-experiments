@@ -1,0 +1,30 @@
+Import('env')
+
+import copy
+import my_utils
+
+includes = [
+    'include',
+]
+
+if env['COMPILER_FAMILY'] == 'gcc':
+    includes.append('include/compiler-specific/gcc')
+elif env['COMPILER_FAMILY'] == 'clang':
+    includes.append('include/compiler-specific/clang')
+
+libs = [
+    'common'
+]
+
+libs_path = [
+    env['LIBS_DIR'],
+    env['THIRD_PARTY_LIBS_DIR'],
+]
+
+sources = ['src/unittest.cpp']
+unittest = my_utils.createUnittest(env, 'simd-and-unittest', sources, includes, libs, libs_path)
+bin = env.Alias("simd-and", unittest)
+
+sources = Glob('src/benchmark-*.cpp')
+benchmark = my_utils.createBenchmark(env, 'simd-and-benchmark', sources, includes, libs, libs_path)
+env.Alias("simd-and", benchmark)

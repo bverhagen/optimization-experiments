@@ -1,0 +1,162 @@
+import os
+opts = Variables()
+
+import my_utils
+
+map_logLevel_to_define = {
+    'debug' : 'LOG_LEVEL_DEBUG',
+    'warning' : 'LOG_LEVEL_WARNING',
+    'error' : 'LOG_LEVEL_ERROR',
+    'none' : 'LOG_LEVEL_NONE'
+}
+
+opts.Add(EnumVariable('compiler', 'Set toolchain', 'gcc',
+                    allowed_values=('gcc', 'clang'),
+                    map={},
+                    ignorecase=2))
+
+opts.Add(EnumVariable('toolchainPrefix', 'Set toolchain prefix', '',
+                    allowed_values=('', 'arm-bcm2708hardfp-linux-gnueabi'),
+                    map={},
+                    ignorecase=2))
+
+opts.Add(PathVariable('toolchainPath', 'Set toolchain path', '/usr/bin'))
+
+
+opts.Add(EnumVariable('mode', 'Set build mode', 'debug',
+                    allowed_values=('debug', 'release'),
+                    map={},
+                    ignorecase=2))
+
+opts.Add(EnumVariable('logLevel', 'Set log mode', 'debug',
+                    allowed_values=('debug', 'warning', 'error','none'),
+                    map={},
+                    ignorecase=2))
+
+opts.Add(EnumVariable('profile', 'Set profile flag', 'no',
+					allowed_values=('yes', 'no', 'gprof', 'perf', 'callgrind'),
+					map = {},
+					ignorecase=2))
+
+opts.Add(EnumVariable('multithreading', 'Set multithreading', 'none',
+					allowed_values=('none', 'openmp'),
+					map = {},
+					ignorecase=2))
+
+# Tools
+tools_list = [
+	# default tools
+	'default',
+]
+
+env=Environment(variables=opts, tools = tools_list, ENV = {'PATH' : os.environ['PATH']})
+Export('env')
+
+#compiler = env['compiler']
+#toolchainPrefix = env['toolchainPrefix']
+#toolchainPath = env['toolchainPath']
+
+my_utils.setupToolchain(env, env['compiler'], env['toolchainPrefix'], env['toolchainPath'])
+
+toolchain = env['COMPILER_NAME']
+
+rootDir = Dir('.').abspath
+rootBuildDir = Dir('build/{toolchain}/{mode}'.format(toolchain=toolchain, mode=env['mode'])).abspath
+
+# Make a separate one when profiling is set, since this often requires one to toggle between builds
+if env['profile'] != 'no':
+	rootBuildDir += '/profile'
+
+buildDir = Dir('{rootBuildDir}'.format(rootBuildDir = rootBuildDir)).abspath
+sourceDir = Dir('src').abspath
+thirdpartyDir = Dir('3rdparty').abspath
+thirdpartyBuildDir = '{rootBuildDir}/3rdparty'.format(rootBuildDir = rootBuildDir)
+VariantDir('{buildDir}'.format(buildDir=buildDir), sourceDir)
+VariantDir('{thirdpartyDir}'.format(thirdpartyDir=thirdpartyBuildDir), thirdpartyDir)
+
+env['ROOT_DIR'] = Dir('.').abspath
+env['BUILD_DIR'] = buildDir
+env['THIRD_PARTY_DIR'] = '{thirdpartyBuildDir}'.format(thirdpartyBuildDir=thirdpartyBuildDir)
+env['THIRD_PARTY_INCLUDE_DIR'] = '{thirdpartyBuildDir}/include'.format(thirdpartyBuildDir=thirdpartyBuildDir)
+env['THIRD_PARTY_LIBS_DIR'] = '{thirdpartyBuildDir}/libs'.format(thirdpartyBuildDir=thirdpartyBuildDir)
+env['LIBS_DIR'] = '{buildDir}/libs'.format(buildDir = buildDir)
+env['BIN_DIR'] = '{buildDir}/bin'.format(buildDir = buildDir)
+env['TEST_BIN_DIR'] = '{bindir}/test'.format(bindir = env['BIN_DIR'])
+
+env['UNITTEST_LIBS'] = [ 'catch' ]
+env['THIRDPARTY_BENCHMARK_LIB'] = [ 'benchmark', 'pthread' ]
+
+env['CPPPATH'] = []
+env['CPPFLAGS'] = []
+env['CXXFLAGS'] = []
+env['LDFLAGS'] = []
+env['CFLAGS'] = []
+env['LINKFLAGS'] = []
+
+env['CPPPATH'].append('{buildDir}'.format(buildDir=buildDir))
+env['CPPPATH'].append('{thirdpartyBuildDir}'.format(thirdpartyBuildDir=env['THIRD_PARTY_INCLUDE_DIR']))
+
+# Add thirdparties to include path
+env['CPPPATH'].append('{thirdPartyDir}/{catchIncludeDir}'.format(thirdPartyDir = env['THIRD_PARTY_DIR'], catchIncludeDir = "Catch/include"))
+env['CPPPATH'].append('{thirdPartyDir}/{benchmarkIncludeDir}'.format(thirdPartyDir = env['THIRD_PARTY_DIR'], benchmarkIncludeDir = "benchmark/include"))
+
+# Fix for 3rd party modules that actually want to be installed in the system dirs
+env['CXXFLAGS'].append(['-isystem{thirdpartyBuildDir}'.format(thirdpartyBuildDir=env['THIRD_PARTY_INCLUDE_DIR'])])
+
+env['CPPDEFINES'] = []
+env['CPPDEFINES'].append(map_logLevel_to_define[env['logLevel']])
+
+if env['mode'] == 'release':
+    env['CPPFLAGS'].append(['-O3', '-g'])
+else:
+    env['CPPFLAGS'].append(['-g', '-O0'])
+
+##################################### Profiling related stuff ##############################
+# Default when profiling is enabled: perf
+if env['profile'] == 'yes':
+	env['profile'] = 'perf'
+
+if env['profile'] != 'no':
+	# Add debugging symbols to enable more useful information when profiling
+	env['CPPFLAGS'].append('-g')
+	# Disable inlining
+	env['CPPFLAGS'].append('-fno-inline')
+
+if env['profile'] == 'gprof':
+	env['CFLAGS'].append('-pg')
+	env['CPPFLAGS'].append('-pg')
+	env['LINKFLAGS'].append('-pg')
+
+
+env['CPPFLAGS'].append(['-Wall', '-Wextra', '-Wshadow',  '-Wpointer-arith', '-std=c++11'])
+#env['CPPFLAGS'].append(['-Wcast-qual'])
+
+################################## Multi-threading related stuff ############################@
+if env['multithreading'] == 'openmp':
+    env['CPPFLAGS'].append(['-fopenmp'])
+    env['LINKFLAGS'].append(['-fopenmp'])
+
+################################## Target specific stuff ##################################   
+#if(toolchainPrefix == 'arm-bcm2708hardfp-linux-gnueabi-'):
+#    env['CPPFLAGS'].append(['-mfpu=vfp', '-mfloat-abi=hard', '-march=armv6zk', '-mtune=arm1176jzf-s'])
+    # Suppress mangling va thing
+#    env['CPPFLAGS'].append('-Wno-psabi')
+
+################################## Other stuff ##############################
+env['STD_LIBS'] = [
+	'rt',
+    'm',
+    'dl',
+    'stdc++'
+]
+
+################################## Print stuff ###############################
+print("Building in {buildDir}".format(buildDir=buildDir))
+
+################################# Call Sconscript file tree ##########################
+SConscript_files = [
+	'{thirdpartyBuildDir}/SConscript'.format(thirdpartyBuildDir = thirdpartyBuildDir),
+	'{buildDir}/SConscript'.format(buildDir=buildDir),
+]
+
+SConscript(SConscript_files)

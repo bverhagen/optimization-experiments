@@ -1,18 +1,17 @@
 #!/usr/bin/python
 
-from .cmake import Cmake
-from .b2 import B2
+from .scons import Scons
 
-buildSystem = B2()
+buildSystem = Scons()
 
 def initBuildSystem(workingDir, mode):
     return buildSystem.init(workingDir, mode)
 
-def buildBuildSystem(target, mode, verbose):
-    return buildSystem.build(target, mode, verbose)
+def buildBuildSystem(target, mode, runMode, compiler, verbose, singleThreaded):
+    return buildSystem.build(target, mode, runMode, compiler, verbose, singleThreaded)
 
-def cleanBuildSystem(target, mode, verbose):
-    return buildSystem.clean(target, mode, verbose)
+def cleanBuildSystem(target, mode, compiler, verbose):
+    return buildSystem.clean(target, mode, compiler, verbose)
 
-def distcleanBuildSystem(mode):
-    return buildSystem.distclean(mode)
+def distcleanBuildSystem(mode, compiler):
+    return buildSystem.distclean(mode, compiler)

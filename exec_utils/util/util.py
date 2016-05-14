@@ -29,8 +29,8 @@ def pwd():
 def getBuildDirWithoutMode():
     return BUILD_DIR
 
-def getBuildDir(mode):
-    return BUILD_DIR + '/' + mode
+def getBuildDir(mode, compiler):
+    return BUILD_DIR + '/' + compiler + '/' + mode
 
 def getBinDir(mode):
     return BIN_DIR + '/' + mode

@@ -1,0 +1,10 @@
+Import('env')
+
+folders = [
+	'benchmark/SConscript',
+	'catch/SConscript',
+    'common/SConscript',
+    'simd-and/SConscript'
+]
+
+SConscript(folders)

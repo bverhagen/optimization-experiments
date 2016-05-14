@@ -1,0 +1,5 @@
+files = [
+	'benchmark.SConscript'
+]
+
+SConscript(files)

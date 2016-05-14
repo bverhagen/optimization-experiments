@@ -10,6 +10,7 @@ addons:
         packages:
             - cmake
             - python3
+            - scons
             - valgrind
 
 language: c++
