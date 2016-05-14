@@ -3,13 +3,6 @@ opts = Variables()
 
 import setupTools
 
-map_logLevel_to_define = {
-    'debug' : 'LOG_LEVEL_DEBUG',
-    'warning' : 'LOG_LEVEL_WARNING',
-    'error' : 'LOG_LEVEL_ERROR',
-    'none' : 'LOG_LEVEL_NONE'
-}
-
 opts.Add(EnumVariable('compiler', 'Set toolchain', 'gcc',
                     allowed_values=('gcc', 'clang'),
                     map={},
@@ -28,11 +21,6 @@ opts.Add(EnumVariable('mode', 'Set build mode', 'debug',
                     map={},
                     ignorecase=2))
 
-opts.Add(EnumVariable('logLevel', 'Set log mode', 'debug',
-                    allowed_values=('debug', 'warning', 'error','none'),
-                    map={},
-                    ignorecase=2))
-
 opts.Add(EnumVariable('profile', 'Set profile flag', 'no',
 					allowed_values=('yes', 'no', 'gprof', 'perf', 'callgrind'),
 					map = {},
@@ -44,23 +32,15 @@ opts.Add(EnumVariable('multithreading', 'Set multithreading', 'none',
 					ignorecase=2))
 
 # Tools
-tools_list = [
-	'default',
-]
+tools_list = ['default']
 
 env=Environment(variables=opts, tools = tools_list, ENV = {'PATH' : os.environ['PATH']})
 Export('env')
 
-#compiler = env['compiler']
-#toolchainPrefix = env['toolchainPrefix']
-#toolchainPath = env['toolchainPath']
-
 setupTools.setupToolchain(env, env['compiler'], env['toolchainPrefix'], env['toolchainPath'])
 
-toolchain = env['COMPILER_NAME']
-
 rootDir = Dir('.').abspath
-rootBuildDir = Dir('build/{toolchain}/{mode}'.format(toolchain=toolchain, mode=env['mode'])).abspath
+rootBuildDir = Dir('build/{toolchain}/{mode}'.format(toolchain=env['COMPILER_NAME'], mode=env['mode'])).abspath
 
 # Make a separate one when profiling is set, since this often requires one to toggle between builds
 if env['profile'] != 'no':
@@ -103,15 +83,17 @@ env['CPPPATH'].append('{thirdPartyDir}/{benchmarkIncludeDir}'.format(thirdPartyD
 # Fix for 3rd party modules that actually want to be installed in the system dirs
 env['CXXFLAGS'].append(['-isystem{thirdpartyBuildDir}'.format(thirdpartyBuildDir=env['THIRD_PARTY_INCLUDE_DIR'])])
 
-env['CPPDEFINES'] = []
-env['CPPDEFINES'].append(map_logLevel_to_define[env['logLevel']])
+env['STD_LIBS'] = setupTools.getStdLibs(env['COMPILER_FAMILY'])
+
+setupTools.enableWarnings(env)
+setupTools.enableWarningAsError(env)
+setupTools.enableCxxVersion(env, setupTools.CXX_VERSION_11)
 
 if env['mode'] == 'release':
-    env['CPPFLAGS'].append(['-O3', '-g'])
+    setupTools.enableOptimization(env, setupTools.OPTIMIZATION_LEVEL_3)
 else:
-    env['CPPFLAGS'].append(['-g', '-O0'])
-
-env['STD_LIBS'] = setupTools.getStdLibs(env['COMPILER_FAMILY'])
+    setupTools.enableOptimization(env)
+    setupTools.enableDebuggingSymbols(env)
 
 ##################################### Profiling related stuff ##############################
 # Default when profiling is enabled: perf
@@ -129,14 +111,9 @@ if env['profile'] == 'gprof':
 	env['CPPFLAGS'].append('-pg')
 	env['LINKFLAGS'].append('-pg')
 
-
-env['CPPFLAGS'].append(['-Wall', '-Wextra', '-Wshadow',  '-Wpointer-arith', '-std=c++11'])
-#env['CPPFLAGS'].append(['-Wcast-qual'])
-
 ################################## Multi-threading related stuff ############################@
 if env['multithreading'] == 'openmp':
-    env['CPPFLAGS'].append(['-fopenmp'])
-    env['LINKFLAGS'].append(['-fopenmp'])
+    setupTools.enableMultiThreading(MULTI_THREADING_OPENMP)
 
 ################################## Target specific stuff ##################################   
 #if(toolchainPrefix == 'arm-bcm2708hardfp-linux-gnueabi-'):
