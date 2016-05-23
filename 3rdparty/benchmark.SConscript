@@ -11,8 +11,13 @@ cmake_options = [
     '-DBENCHMARK_ENABLE_LTO=OFF '
 ]
 
+sources = [
+    Glob('benchmark/src/*.cc'),
+    Glob('benchmark/src/*.h')
+]
+
 lib = buildTools.buildCmake(    env, 'libbenchmark.a', 
-                                Glob('benchmark/src/*.cc'), 
+                                sources, 
                                 '3rdparty/benchmark',
                                 env['THIRD_PARTY_DIR'] + '/benchmark', 
                                 cmake_options,
