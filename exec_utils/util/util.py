@@ -47,6 +47,12 @@ def executeInShell(cmd, working_directory = '.'):
     retValue = subprocess.call(cmd, cwd = working_directory)
     return retValue
 
+def getShellOutput(cmd, working_directory = '.'):
+    print("Executing '{0}' in '{1}'".format(listToString(cmd, ' '), working_directory))
+    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, cwd = working_directory)
+    out, err = process.communicate()
+    return out,err
+
 def getAllDirs(path):
     dirs = [x[0] for x in os.walk(path)]
     for root, dirs, files in os.walk(path):

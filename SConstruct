@@ -125,6 +125,8 @@ if env['multithreading'] == 'openmp':
 ################################## Print stuff ###############################
 print("Building in {buildDir}".format(buildDir=buildDir))
 
+setupTools.checkSubmodules(env['BUILD_DIR'])
+
 ################################# Call Sconscript file tree ##########################
 SConscript_files = [
 	'{thirdpartyBuildDir}/SConscript'.format(thirdpartyBuildDir = thirdpartyBuildDir),

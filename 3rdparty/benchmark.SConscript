@@ -2,6 +2,10 @@ Import('env')
 
 import buildTools
 
+# Download the library
+env.Command('benchmark/src/benchmark.cc', 'benchmark.commit', 'git submodule init 3rdparty/benchmark && git submodule update 3rdparty/benchmark')
+
+# Build the library
 cmake_options = [
     '-DBENCHMARK_ENABLE_TESTING=OFF',
     '-DBENCHMARK_ENABLE_LTO=OFF '

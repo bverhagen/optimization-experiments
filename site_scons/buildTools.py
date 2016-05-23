@@ -1,9 +1,7 @@
 import copy     # For some reason importing this does not work
 
 from SCons.Script import *
-
-def listToString(list, separator):
-    return separator.join(list)
+import scons_utils
 
 def buildCmake(env, output, sources, cmakeRootDir, buildDir, cmakeOptions, outputAfterCmakeBuild):
     return env.Command(output, sources, 
@@ -12,7 +10,7 @@ def buildCmake(env, output, sources, cmakeRootDir, buildDir, cmakeOptions, outpu
         'mkdir -p ' + buildDir,
         'cmake -B' + buildDir + ' ' + '-H' + cmakeRootDir +' ' + 
             '-DCMAKE_BUILD_TYPE=Release ' +
-            listToString(cmakeOptions, ' ') +
+            scons_utils.listToString(cmakeOptions, ' ') +
             '-DCMAKE_C_COMPILER=' + env['CC'] + ' ' +
             '-DCMAKE_CXX_COMPILER=' + env['CXX'],
         'make -C' + buildDir + ' -j',

@@ -1,4 +1,7 @@
 from SCons.Script import *
+import scons_utils
+import re
+import os
 
 OPTIMIZATION_LEVEL_0 = 0
 OPTIMIZATION_LEVEL_1 = 1
@@ -90,3 +93,33 @@ def enableMultiThreading(env, multiThreading = MULTI_THREADING_OFF):
 def enableWarningAsError(env):
     if env['COMPILER_FAMILY'] == 'gcc' or env['COMPILER_FAMILY'] == 'clang':
         env['CPPFLAGS'].append('-Werror')
+
+class Submodule:
+    def __init__(self, name, commitHash):
+        self.name = name
+        self.commitHash = commitHash
+
+def writeSubmoduleCommit(destinationFile, commit):
+    print(destinationFile)
+    with open(destinationFile, 'w') as f:
+        f.write(commit)
+
+def checkSubmodules(buildDir):
+    cmd = ['git', 'submodule', 'status']
+    out, err = scons_utils.getShellOutput(cmd)
+    for line in out.splitlines():
+        parts = line.strip().split(' ')
+        commitHash = parts[0]
+        if commitHash[0] == '-':
+            commitHash = commitHash[1:]
+        name = parts[1]
+
+        submodule = Submodule(name, commitHash)
+        destinationFile = submodule.name + '.commit'
+        if os.path.isfile(destinationFile):
+            with open(destinationFile, 'r') as f:
+                if f.read() != submodule.commitHash:
+                    # Means the commit has changed
+                    writeSubmoduleCommit(destinationFile, submodule.commitHash)
+        else:
+            writeSubmoduleCommit(destinationFile, submodule.commitHash)

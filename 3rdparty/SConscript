@@ -1,5 +1,6 @@
 files = [
-	'benchmark.SConscript'
+	'benchmark.SConscript',
+	'catch.SConscript'
 ]
 
 SConscript(files)
