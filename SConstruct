@@ -63,7 +63,6 @@ env['BIN_DIR'] = '{buildDir}/bin'.format(buildDir = buildDir)
 env['UNITTEST_BIN_DIR'] = '{bindir}/test/unittest'.format(bindir = env['BIN_DIR'])
 env['BENCHMARK_BIN_DIR'] = '{bindir}/benchmark'.format(bindir = env['BIN_DIR'])
 
-env['UNITTEST_LIBS'] = [ 'catch' ]
 env['THIRDPARTY_BENCHMARK_LIB'] = [ 'benchmark', 'pthread' ]
 
 env['CPPPATH'] = []

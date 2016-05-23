@@ -41,6 +41,7 @@ def createUnittest(env, name, sources, includes, libs, libs_path):
     libs_unittest.extend(env['STD_LIBS'])
 
     env_unittest['CPPPATH'].extend(includes)
+    env_unittest['CPPPATH'].append(env['ROOT_DIR'] + '/3rdparty/Catch/include')
 
     for lib in libs:
         addIncludeUsageRequirement(env_unittest, lib, env_unittest['CPPPATH'])
