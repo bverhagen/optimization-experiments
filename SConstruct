@@ -82,7 +82,7 @@ env['CPPPATH'].append('{thirdPartyDir}/{benchmarkIncludeDir}'.format(thirdPartyD
 # Fix for 3rd party modules that actually want to be installed in the system dirs
 env['CXXFLAGS'].append(['-isystem{thirdpartyBuildDir}'.format(thirdpartyBuildDir=env['THIRD_PARTY_INCLUDE_DIR'])])
 
-env['STD_LIBS'] = setupTools.getStdLibs(env['COMPILER_FAMILY'])
+env['STD_LIBS'] = setupTools.getStdLibs(env, env['COMPILER_FAMILY'])
 
 setupTools.enableWarnings(env)
 setupTools.enableWarningAsError(env)

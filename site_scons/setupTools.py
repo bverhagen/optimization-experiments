@@ -1,24 +1,11 @@
 from SCons.Script import *
+from compilerEnumerations import *
 import scons_utils
 import re
 import os
 
-OPTIMIZATION_LEVEL_0 = 0
-OPTIMIZATION_LEVEL_1 = 1
-OPTIMIZATION_LEVEL_2 = 2
-OPTIMIZATION_LEVEL_3 = 3
-OPTIMIZATION_LEVEL_DEBUG = OPTIMIZATION_LEVEL_0
-
-WARNING_LEVEL_NONE = 0
-WARNING_LEVEL_SOME = 1
-WARNING_LEVEL_ALL = 2
-
-CXX_VERSION_03 = 0
-CXX_VERSION_11 = 1
-
-MULTI_THREADING_OFF = 0
-MULTI_THREADING_PTHREAD = 1
-MULTI_THREADING_OPENMP = 2
+import gcc
+import clang
 
 def setupToolchain(env, compiler, toolchainPrefix = None, toolchainPath = None):
     toolchain = ''
@@ -36,66 +23,41 @@ def setupToolchain(env, compiler, toolchainPrefix = None, toolchainPath = None):
     env['CC'] = toolchain + compiler
 
     if compiler == 'gcc':
-        env['CXX'] = toolchain + 'g++'
-        env['AR'] = toolchain + 'ar' 
-        env['AS'] = toolchain + 'as' 
-        env['LD'] = toolchain + 'ld'
-        env['NM'] = toolchain + 'nm' 
-        env['STRIP'] = toolchain + 'strip' 
+        env['SETUPCONFIG_TOOLCHAIN'] = gcc.Gcc(env, toolchain)
 
     elif compiler == 'clang':
-        env['CXX'] = toolchain + 'clang++'
+        env['SETUPCONFIG_TOOLCHAIN'] = clang.Clang(env, toolchain)
 
     print("Toolchain: " + toolchain)
     print("C Compiler: " + env['CC'])
     print("CXX Compiler: " + env['CXX'])
 
-def getStdLibs(compiler):
-    return list(['rt', 'm', 'dl', 'stdc++'])
+def getStdLibs(env, compiler):
+    return env['SETUPCONFIG_TOOLCHAIN'].getStdLibs(compiler)
 
 def enableOptimization(env, optimizationLevel = OPTIMIZATION_LEVEL_0):
-    if env['COMPILER_FAMILY'] == 'gcc' or env['COMPILER_FAMILY'] == 'clang':
-        if optimizationLevel is OPTIMIZATION_LEVEL_0:
-            env['CPPFLAGS'].append('-O0')
-        elif optimizationLevel is OPTIMIZATION_LEVEL_1:
-            env['CPPFLAGS'].append('-O1')
-        elif optimizationLevel is OPTIMIZATION_LEVEL_2:
-            env['CPPFLAGS'].append('-O2')
-        elif optimizationLevel is OPTIMIZATION_LEVEL_3:
-            env['CPPFLAGS'].append('-O3')
-        else:
-            print('Warning: optimization level ' + optimizationLevel + ' not supported')
+    env['SETUPCONFIG_TOOLCHAIN'].enableOptimization(env, optimizationLevel)
 
 def enableDebuggingSymbols(env):
-    if env['COMPILER_FAMILY'] == 'gcc' or env['COMPILER_FAMILY'] == 'clang':
-        env['CPPFLAGS'].append('-g')
+    env['SETUPCONFIG_TOOLCHAIN'].enableDebuggingSymbols(env)
 
 def enableWarnings(env, warningLevel = WARNING_LEVEL_ALL):
-    if env['COMPILER_FAMILY'] == 'gcc' or env['COMPILER_FAMILY'] == 'clang':
-        if warningLevel >= WARNING_LEVEL_SOME:
-            env['CPPFLAGS'].append('-Wall')
-        if warningLevel >= WARNING_LEVEL_ALL:
-            env['CPPFLAGS'].extend(['-Wextra', '-Wshadow',  '-Wpointer-arith', '-Wcast-qual'])
+    env['SETUPCONFIG_TOOLCHAIN'].enableWarnings(env, warningLevel)
 
 def enableCxxVersion(env, cxxVersion = CXX_VERSION_03):
-    if env['COMPILER_FAMILY'] == 'gcc' or env['COMPILER_FAMILY'] == 'clang':
-        if cxxVersion == CXX_VERSION_11:
-            env['CPPFLAGS'].append('-std=c++11')
+    env['SETUPCONFIG_TOOLCHAIN'].enableCxxVersion(env, cxxVersion)
 
 def enableMultiThreading(env, multiThreading = MULTI_THREADING_OFF):
-    if env['COMPILER_FAMILY'] == 'gcc' or env['COMPILER_FAMILY'] == 'clang':
-        if multiThreading == MULTI_THREADING_PTHREAD:
-            env['CPPFLAGS'].append(['-pthread'])
-        elif multiThreading == MULTI_THREADING_OPENMP:
-            env['CPPFLAGS'].append(['-fopenmp'])
-            env['LINKFLAGS'].append(['-fopenmp'])
+    env['SETUPCONFIG_TOOLCHAIN'].enableMultiThreading(env, multiThreading)
 
 def enableWarningAsError(env):
-    if env['COMPILER_FAMILY'] == 'gcc' or env['COMPILER_FAMILY'] == 'clang':
-        env['CPPFLAGS'].append('-Werror')
+    env['SETUPCONFIG_TOOLCHAIN'].enableWarningAsError(env)
 
 def saveTemps(env):
-    env['CPPFLAGS'].extend(['-save-temps', '-fverbose-asm'])
+    env['SETUPCONFIG_TOOLCHAIN'].saveTemps(env)
+
+def stopAtAssembler(env):
+    env['SETUPCONFIG_TOOLCHAIN'].stopAtAssembler(env)
 
 class Submodule:
     def __init__(self, name, commitHash):
@@ -106,9 +68,6 @@ def writeSubmoduleCommit(destinationFile, commit):
     print(destinationFile)
     with open(destinationFile, 'w') as f:
         f.write(commit)
-
-def stopAtAssembler(env):
-    env['CPPFLAGS'].extend(['-S', '-fverbose-asm', '-Wa,-adhln'])
 
 def checkSubmodules(buildDir):
     cmd = ['git', 'submodule', 'status']
