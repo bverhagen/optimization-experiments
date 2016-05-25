@@ -26,5 +26,6 @@ unittest = buildTools.createUnittest(env, 'simd-and-unittest', sources, includes
 bin = env.Alias("simd-and", unittest)
 
 sources = Glob('src/benchmark-*.cpp')
-benchmark = buildTools.createBenchmark(env, 'simd-and-benchmark', sources, includes, libs, libs_path)
-env.Alias("simd-and", benchmark)
+benchmarks = buildTools.createBenchmark(env, 'simd-and-benchmark', sources, includes, libs, libs_path, TEMPS=['.s'])
+for target in benchmarks:
+    env.Alias("simd-and", target)

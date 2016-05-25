@@ -1,7 +1,9 @@
 import copy     # For some reason importing this does not work
+import os
 
 from SCons.Script import *
 import scons_utils
+import setupTools
 
 def buildCmake(env, output, sources, cmakeRootDir, buildDir, cmakeOptions, outputAfterCmakeBuild):
     return env.Command(output, sources, 
@@ -52,7 +54,7 @@ def createUnittest(env, name, sources, includes, libs, libs_path):
     env.Alias("unittests", installed_bin)
     return installed_bin
 
-def createBenchmark(env, name, sources, includes, libs, libs_path):
+def createBenchmark(env, name, sources, includes, libs, libs_path, TEMPS = []):
     env_benchmark = env.Clone()
     libs_benchmark = copy.deepcopy(libs)
 
@@ -68,7 +70,35 @@ def createBenchmark(env, name, sources, includes, libs, libs_path):
     installed_bin = env.Install("{bin_dir}".format(bin_dir=env['BENCHMARK_BIN_DIR']), target)
     env.Alias(name, installed_bin)
     env.Alias("benchmarks", installed_bin)
-    return installed_bin
+
+    targetList = [installed_bin]
+
+    # Create temps
+    for temp in TEMPS:
+        if temp == '.s' or temp == '.S':
+            asm_files = createAssembler(env, name, sources, includes, libs, libs_path)
+            targetList.append(asm_files)
+
+    return targetList
+
+def createAssembler(env, name, sources, includes, libs, libs_path):
+    env_benchmark = env.Clone()
+
+    env_benchmark['CPPPATH'].extend(includes)
+    setupTools.stopAtAssembler(env_benchmark)
+
+    for lib in libs:
+        addIncludeUsageRequirement(env_benchmark, lib, env_benchmark['CPPPATH'])
+
+    # Build target sources
+    targets = []
+    for source in sources:
+        targetFile = os.path.splitext(source.rstr())[0]+'.s'
+        target = env_benchmark.StaticObject(targetFile, source )
+        env.Alias(name, target)
+        env.Alias("benchmarks", target)
+
+    return target
 
 def createLib(env, name, sources, includes, includeUsageRequirements):
     createIncludeUsageRequirement(env, name, includeUsageRequirements)

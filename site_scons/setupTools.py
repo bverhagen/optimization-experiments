@@ -94,6 +94,9 @@ def enableWarningAsError(env):
     if env['COMPILER_FAMILY'] == 'gcc' or env['COMPILER_FAMILY'] == 'clang':
         env['CPPFLAGS'].append('-Werror')
 
+def saveTemps(env):
+    env['CPPFLAGS'].extend(['-save-temps', '-fverbose-asm'])
+
 class Submodule:
     def __init__(self, name, commitHash):
         self.name = name
@@ -103,6 +106,9 @@ def writeSubmoduleCommit(destinationFile, commit):
     print(destinationFile)
     with open(destinationFile, 'w') as f:
         f.write(commit)
+
+def stopAtAssembler(env):
+    env['CPPFLAGS'].extend(['-S', '-fverbose-asm', '-Wa,-adhln'])
 
 def checkSubmodules(buildDir):
     cmd = ['git', 'submodule', 'status']
