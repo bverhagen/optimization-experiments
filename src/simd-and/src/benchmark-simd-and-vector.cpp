@@ -1,5 +1,7 @@
 #include "benchmark-simd-and.h"
 
+#include <iostream>
+
 using std::size_t;
 
 namespace SimdAnd {
@@ -14,7 +16,7 @@ namespace SimdAnd {
             while(state.KeepRunning()) {
                 simdAnd(input1, input2, output, nbOfElements);
                 benchmark::DoNotOptimize(output[0]);
-                benchmark::DoNotOptimize(output[state.range_x()-1]);
+                benchmark::DoNotOptimize(output[nbOfElements-1]);
             }
         }
         BENCHMARK(SimdAndVector)->Range(minVectorRange, maxRange);
