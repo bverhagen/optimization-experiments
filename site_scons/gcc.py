@@ -14,13 +14,11 @@ class Gcc:
         env['STRIP'] = toolchain + 'strip' 
 
         env['CPPPATH'] = []
-        env['CPPFLAGS'] = []
+        env['CPPFLAGS'] = ['-mno-lra']
         env['CXXFLAGS'] = []
         env['LDFLAGS'] = []
         env['CFLAGS'] = []
         env['LINKFLAGS'] = []
-
-        env['CPPFLAGS'].append('-mno-fma')
 
     @staticmethod
     def getStdLibs(compiler):
