@@ -65,13 +65,6 @@ env['BENCHMARK_BIN_DIR'] = '{bindir}/benchmark'.format(bindir = env['BIN_DIR'])
 
 env['THIRDPARTY_BENCHMARK_LIB'] = [ 'benchmark', 'pthread' ]
 
-env['CPPPATH'] = []
-env['CPPFLAGS'] = []
-env['CXXFLAGS'] = []
-env['LDFLAGS'] = []
-env['CFLAGS'] = []
-env['LINKFLAGS'] = []
-
 env['CPPPATH'].append('{buildDir}'.format(buildDir=buildDir))
 env['CPPPATH'].append('{thirdpartyBuildDir}'.format(thirdpartyBuildDir=env['THIRD_PARTY_INCLUDE_DIR']))
 

@@ -13,7 +13,14 @@ class Gcc:
         env['NM'] = toolchain + 'nm' 
         env['STRIP'] = toolchain + 'strip' 
 
-        env['CPPFLAGS'].append('-mno-lra')
+        env['CPPPATH'] = []
+        env['CPPFLAGS'] = []
+        env['CXXFLAGS'] = []
+        env['LDFLAGS'] = []
+        env['CFLAGS'] = []
+        env['LINKFLAGS'] = []
+
+        env['CPPFLAGS'].append('-mno-fma')
 
     @staticmethod
     def getStdLibs(compiler):
