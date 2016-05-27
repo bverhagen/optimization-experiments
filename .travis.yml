@@ -16,10 +16,10 @@ addons:
 language: c++
 
 env:
-    - EXEC='distclean init build --target all'
-    - EXEC='distclean init build run --run unittest --target all'
-    - EXEC='distclean init build run --valgrind --run unittest --target all'
-    - EXEC='distclean init build run --run performance --target all'
+    - EXEC='distclean init build --target all --build-single-threaded'
+    - EXEC='distclean init build run --run unittest --target all --build-single-threaded'
+    - EXEC='distclean init build run --valgrind --run unittest --target all --build-single-threaded'
+    - EXEC='distclean init build run --run performance --target all --build-single-threaded'
 
 script: ./exec $EXEC
 
