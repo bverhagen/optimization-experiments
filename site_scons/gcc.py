@@ -13,6 +13,8 @@ class Gcc:
         env['NM'] = toolchain + 'nm' 
         env['STRIP'] = toolchain + 'strip' 
 
+        env['CPPFLAGS'].append('-mno-lra')
+
     @staticmethod
     def getStdLibs(compiler):
         return list(['rt', 'm', 'dl', 'stdc++'])
