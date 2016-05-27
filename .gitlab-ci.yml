@@ -1,5 +1,5 @@
 before_script:
-    ssh-keyscan -H $GITLAB_URL >> ~gitlab_ci_runner/.ssh/known_hosts
+    - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
 
 stages:
     - build
