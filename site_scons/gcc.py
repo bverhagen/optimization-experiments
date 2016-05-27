@@ -14,7 +14,7 @@ class Gcc:
         env['STRIP'] = toolchain + 'strip' 
 
         env['CPPPATH'] = []
-        env['CPPFLAGS'] = ['-mno-lra']
+        env['CPPFLAGS'] = []
         env['CXXFLAGS'] = []
         env['LDFLAGS'] = []
         env['CFLAGS'] = []

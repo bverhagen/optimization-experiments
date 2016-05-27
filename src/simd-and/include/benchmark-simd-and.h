@@ -1,3 +1,6 @@
+#ifndef __BENCHMARKSIMDAND_H__
+#define __BENCHMARKSIMDAND_H__
+
 #include "benchmark/benchmark.h"
 
 #include "targetSpecific.h"
@@ -13,3 +16,5 @@ namespace SimdAnd {
 		const size_t maxRange = minVectorRange << 16;
     }
 }
+
+#endif
