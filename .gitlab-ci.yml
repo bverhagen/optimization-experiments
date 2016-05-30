@@ -4,7 +4,24 @@ before_script:
 
 stages:
     - build
+    - test
 
-build_all:
-    script: "./exec.py distclean init build --target all --compiler gcc --build-single-threaded"
+build-all:
+    script: "./exec.py distclean init build --target all --compiler gcc clang --build-single-threaded"
     stage: build
+
+unittest:
+    script: "./exec.py run --target all --run unittest --compiler gcc clang"
+    stage: test
+
+run-benchmarks-gcc:
+    script: "./exec.py run --target all --run performance --compiler gcc"
+    stage: test
+
+run-benchmarks-clang:
+    script: "./exec.py run --target all --run performance --compiler clang"
+    stage: test
+
+valgrind:
+    script: "./exec.py run --target all --run unittest --valgrind --compiler gcc clang"
+    stage: test
