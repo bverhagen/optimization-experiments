@@ -2,21 +2,22 @@
 #define __PERFORMANCEUTILS_H__
 
 #include <cstdint>
+#include "benchmark/benchmark.h"
 
 namespace performanceUtils
 {
-    void forceUseOfVariableVoid(void* var)noexcept;             // Force the fake use of the variable to be hidden in a separate compilation unit
-	bool alwaysReturnFalse(void) noexcept;
+    bool alwaysReturnFalse(void) noexcept;
 
-	template<typename T> 
-	void forceUseOfVariable(T& var) noexcept {
-	    forceUseOfVariableVoid(static_cast<void*>(&var));       // static_cast is safe, since forceUseOfVariable will not do anything with it anyway.
-	}
+    template<typename T> 
+    inline void doNotOptimize(T& var) noexcept {
+        benchmark::DoNotOptimize(var);
+    }
 
-	template<typename T> 
-	void forceUseOfVariable(T* var) noexcept {
-	    forceUseOfVariableVoid(static_cast<void*>(var));        // static_cast is safe, since forceUseOfVariable will not do anything with it anyway.
-	}
+    // Override for arrays: does not compile with the above.
+    template<typename T> 
+    inline void doNotOptimize(T* var) noexcept {
+        asm volatile("" : "+rm" (var));
+    }
 }
 
 #endif

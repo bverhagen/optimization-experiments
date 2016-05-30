@@ -1,4 +1,5 @@
 #include "benchmark-simd-and.h"
+#include "performanceUtils.h"
 
 namespace SimdAnd {
     namespace Performance {
@@ -11,8 +12,7 @@ namespace SimdAnd {
             uint8_t output[nbOfElements];
             while(state.KeepRunning()) {
                 simdAnd(input1, input2, output, nbOfElements);
-                benchmark::DoNotOptimize(output[0]);
-                benchmark::DoNotOptimize(output[state.range_x()-1]);
+                performanceUtils::doNotOptimize(output);
             }
         }
         BENCHMARK(SimdAndNormal)->Range(minRange, maxRange);
