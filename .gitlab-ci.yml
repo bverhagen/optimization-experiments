@@ -7,21 +7,21 @@ stages:
     - test
 
 build-all:
-    script: "./exec.py distclean init build --target all --compiler gcc clang --build-single-threaded"
+    script: "./exec.py init build --target all --compiler gcc clang --build-single-threaded"
     stage: build
 
 unittest:
-    script: "./exec.py run --target all --run unittest --compiler gcc clang"
+    script: "./exec.py init build run --target all --run unittest --compiler gcc clang"
     stage: test
 
 run-benchmarks-gcc:
-    script: "./exec.py run --target all --run performance --compiler gcc"
+    script: "./exec.py init build run --target all --run performance --compiler gcc"
     stage: test
 
 run-benchmarks-clang:
-    script: "./exec.py run --target all --run performance --compiler clang"
+    script: "./exec.py init build run --target all --run performance --compiler clang"
     stage: test
 
 valgrind:
-    script: "./exec.py run --target all --run unittest --valgrind --compiler gcc clang"
+    script: "./exec.py init build run --target all --run unittest --valgrind --compiler gcc clang"
     stage: test
