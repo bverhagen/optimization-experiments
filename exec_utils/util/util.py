@@ -5,6 +5,7 @@ import subprocess
 
 BUILD_DIR = 'build'
 BIN_DIR = 'bin'
+SRC_DIR = 'src'
 EXIT_SUCCESS = 0
 
 def listToString(list, separator):
@@ -41,17 +42,26 @@ def getUnittestDir(mode, compiler):
 def getPerformancetestDir(mode, compiler):
     return getBuildDir(mode, compiler) + '/bin/benchmark'
 
+def getSrcDir(target = None):
+    if target is None or target == 'all':
+        return SRC_DIR
+    return SRC_DIR + '/' + target
+
 def executeInShell(cmd, working_directory = '.'):
     pwd()
-    print("Executing '{0}' in '{1}'".format(listToString(cmd, ' '), working_directory))
+    print("\nExecuting '{0}' in '{1}'".format(listToString(cmd, ' '), working_directory))
     retValue = subprocess.call(cmd, cwd = working_directory)
     return retValue
 
 def getShellOutput(cmd, working_directory = '.'):
-    print("Executing '{0}' in '{1}'".format(listToString(cmd, ' '), working_directory))
+    print("\nExecuting '{0}' in '{1}'".format(listToString(cmd, ' '), working_directory))
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE, cwd = working_directory)
     out, err = process.communicate()
     return out,err
+
+def isInstalled(binary):
+    cmd = ['which', binary]
+    return isSuccess(executeInShell(cmd))
 
 def getAllDirs(path):
     dirs = [x[0] for x in os.walk(path)]

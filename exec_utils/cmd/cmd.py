@@ -4,6 +4,7 @@ from ..util.util import executeInShell
 from ..vcsSystem.vcsSystem import *
 from ..buildSystem.buildSystem import *
 from ..runner.runner import *
+from ..staticAnalysis.cppcheck import *
 
 def init(workingDir, mode):
     return initVcs() and initBuildSystem(workingDir, mode)
@@ -20,3 +21,6 @@ def distclean(mode, compiler):
 
 def run(target, mode, runTargets, compiler, valgrind):
     return runner(target, mode, runTargets, compiler, valgrind)
+
+def cppcheck(target, verbose):
+    return runCppcheck(target, verbose)

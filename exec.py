@@ -36,6 +36,12 @@ def execute(commands, mode, targets, runTargets, compilers, valgrind, verbose, s
             for compiler in compilers:
                 if not run(targets, mode, runTargets, compiler, valgrind):
                     return EXIT_ERROR
+        elif(command == 'cppcheck'):
+            for target in targets:
+                if not cppcheck(target, verbose):
+                    print("Cppcheck failed!")
+                    return EXIT_ERROR
+            print("Cppcheck succeeded!")
         else:
             print("Error: invalid command")
             return EXIT_ERROR
@@ -44,7 +50,7 @@ def execute(commands, mode, targets, runTargets, compilers, valgrind, verbose, s
 
 
 def main():
-    commandOptions = ['init', 'build', 'clean', 'distclean', 'rebuild', 'run']
+    commandOptions = ['init', 'build', 'clean', 'distclean', 'rebuild', 'run', 'cppcheck']
     buildModeOptions = ['debug', 'release']
     targetOptions = getAllDirs('{rootDir}/src'.format(rootDir=getCurrentDir()))
     targetOptions.extend(['all', 'unittest', 'performance'])

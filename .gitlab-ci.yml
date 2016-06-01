@@ -25,3 +25,7 @@ run-benchmarks-clang:
 valgrind:
     script: "./exec.py init build run --target all --run unittest --valgrind --compiler gcc clang"
     stage: test
+
+cppcheck:
+    script: "./exec.py init cppcheck"
+    stage: test
