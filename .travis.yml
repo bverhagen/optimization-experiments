@@ -12,6 +12,7 @@ addons:
             - python3
             - scons
             - valgrind
+            - cppcheck
 
 language: c++
 

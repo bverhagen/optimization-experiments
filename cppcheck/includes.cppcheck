@@ -1,4 +1,0 @@
-src/simd-and/include
-src/simd-and/include/compiler-specific/gcc
-src/common/include
-src/common/include/amd64

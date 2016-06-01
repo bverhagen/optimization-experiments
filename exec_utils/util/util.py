@@ -73,5 +73,13 @@ def getAllFiles(path):
     for root, dirs, files in os.walk(path):
         return files
 
+def getAllDirsThatContainPattern(rootDir, extension):
+    uniqueDirs = set()
+    for root, dirs, files in os.walk(rootDir):
+        for file in files:
+            if file.endswith(extension):
+                uniqueDirs.add(root)
+    return list(uniqueDirs)
+
 def isSuccess(retValue):
     return retValue == EXIT_SUCCESS
