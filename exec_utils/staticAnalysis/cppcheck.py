@@ -13,9 +13,6 @@ def runCppcheck(target, verbose):
     cmd = [binary_name]
     cmd.append('--enable=all')
     cmd.append('--std=c++11')
-    cmd.append('--includes-file=cppcheck/includes.cppcheck')
-    cmd.append('--config-excludes-file=cppcheck/excludes.cppcheck')
-    cmd.append('--suppressions-list=cppcheck/suppressions.cppcheck')
     cmd.append('--force')
     cmd.append('--error-exitcode=1')
     if verbose:
