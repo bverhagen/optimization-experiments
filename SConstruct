@@ -4,7 +4,7 @@ opts = Variables()
 import setupTools
 
 opts.Add(EnumVariable('compiler', 'Set toolchain', 'gcc',
-                    allowed_values=('gcc', 'clang'),
+                    allowed_values=('gcc', 'clang', 'cc'),
                     map={},
                     ignorecase=2))
 

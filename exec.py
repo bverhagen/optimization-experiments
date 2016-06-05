@@ -9,7 +9,7 @@ import sys
 EXIT_SUCCESS = 0
 EXIT_ERROR = 1
 
-def execute(commands, mode, targets, runTargets, compilers, valgrind, verbose, singleThreaded):
+def execute(commands, mode, targets, runTargets, compilers, valgrind, verbose, singleThreaded, analyzeMethods):
     for command in commands:
         if(command == 'init'):
             if not init(getCurrentDir(), mode):
@@ -36,12 +36,11 @@ def execute(commands, mode, targets, runTargets, compilers, valgrind, verbose, s
             for compiler in compilers:
                 if not run(targets, mode, runTargets, compiler, valgrind):
                     return EXIT_ERROR
-        elif(command == 'cppcheck'):
-            for target in targets:
-                if not cppcheck(target, verbose):
-                    print("Cppcheck failed!")
-                    return EXIT_ERROR
-            print("Cppcheck succeeded!")
+        elif(command == 'analyze'):
+            for analyzeMethod in analyzeMethods:
+                for target in targets:
+                    if not analyze(analyzeMethod, mode, target, verbose):
+                        return EXIT_ERROR
         else:
             print("Error: invalid command")
             return EXIT_ERROR
@@ -50,12 +49,13 @@ def execute(commands, mode, targets, runTargets, compilers, valgrind, verbose, s
 
 
 def main():
-    commandOptions = ['init', 'build', 'clean', 'distclean', 'rebuild', 'run', 'cppcheck']
+    commandOptions = ['init', 'build', 'clean', 'distclean', 'rebuild', 'run', 'analyze']
     buildModeOptions = ['debug', 'release']
     targetOptions = getAllDirs('{rootDir}/src'.format(rootDir=getCurrentDir()))
     targetOptions.extend(['all', 'unittest', 'performance'])
     runTargetOptions = ['unittest', 'performance', 'all']
     compilerOptions = ['gcc', 'clang']
+    analyzeOptions = ['clang', 'cppcheck']
 
     parser = argparse.ArgumentParser(description='Convenience script for executing commands')
     parser.add_argument('commands', metavar='commands', nargs='+', choices=commandOptions,
@@ -71,13 +71,15 @@ def main():
     parser.add_argument('-w', '--valgrind', action='store_true', help="Enable valgrind memcheck. Only applicable on the run command")
     parser.add_argument('-v', '--verbose-make', action='store_true', help="Enable make in verbose mode")
     parser.add_argument('-s', '--build-single-threaded', action='store_true', help="Build in single threaded mode")
+    parser.add_argument('-a', '--analyze-method', nargs='+', choices=analyzeOptions, default=['clang'],
+		   help="Run analysis.")
 
     args = parser.parse_args()
     print('Commands = {0}'.format(listToString(args.commands, ' - ')))
     print('Build mode = {0}'.format(args.mode))
     print('Target = {0}'.format(listToString(args.target, ' - ')))
 
-    sys.exit(execute(args.commands, args.mode, args.target, args.run, args.compiler, args.valgrind, args.verbose_make, args.build_single_threaded))
+    sys.exit(execute(args.commands, args.mode, args.target, args.run, args.compiler, args.valgrind, args.verbose_make, args.build_single_threaded, args.analyze_method))
 
 if __name__ == "__main__":
     main()

@@ -16,13 +16,18 @@ class Scons:
     def init(self, workingDir, mode):
         return True
 
-    def build(self, target, mode, runMode, compiler, verbose, singleThreaded):
-        build_command = self.getBuildCommand()
+    def build(self, target, mode, runMode, compiler, verbose, singleThreaded, prependCommand = None):
+        if prependCommand is None:
+            build_command = self.getBuildCommand()
+        else:
+            build_command = prependCommand
+            build_command.extend(self.getBuildCommand())
+
         build_command.append('mode={0}'.format(mode))
 
         # Add multithreaded building by default
         if not singleThreaded:
-            build_command.append('-j 8')
+            build_command.append('-j8')
 
         build_command.append('compiler=' + compiler) 
 
@@ -33,7 +38,7 @@ class Scons:
             if runMode == 'unittest':
                 target = target + '-unittest'
             elif runMode == 'performance':
-                    target = target + '-benchmark'
+                target = target + '-benchmark'
 
             print("Building target {0} in {1} mode".format(target, mode))
             build_command.append(target)

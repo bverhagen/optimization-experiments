@@ -66,6 +66,10 @@ class Gcc:
         env['CPPFLAGS'].append('-Werror')
 
     @staticmethod
+    def disableWarningAsError(env):
+        env['CPPFLAGS'].remove('-Werror')
+
+    @staticmethod
     def saveTemps(env):
         env['CPPFLAGS'].extend(['-save-temps', '-fverbose-asm'])
 

@@ -21,7 +21,8 @@ env:
     - EXEC='distclean init build run --run unittest --target all'
     - EXEC='distclean init build run --valgrind --run unittest --target all'
     - EXEC='distclean init build run --run performance --target all'
-    - EXEC='distclean init cppcheck'
+    - EXEC='init analyze -a cppcheck'
+    - EXEC='distclean init analyze -a clang'
 
 script: ./exec $EXEC
 

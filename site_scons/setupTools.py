@@ -17,16 +17,27 @@ def setupToolchain(env, compiler, toolchainPrefix = None, toolchainPath = None):
         toolchain = toolchain + toolchainPrefix + '-'
         compilerName = toolchainPrefix + '-'
 
-    # Define generally available environment variables
-    env['COMPILER_NAME'] = compilerName + compiler
-    env['COMPILER_FAMILY'] = compiler
-    env['CC'] = toolchain + compiler
-
     if compiler == 'gcc':
+        # Define generally available environment variables
+        env['COMPILER_NAME'] = compilerName + compiler
+        env['COMPILER_FAMILY'] = compiler
+        env['CC'] = toolchain + compiler
         env['SETUPCONFIG_TOOLCHAIN'] = gcc.Gcc(env, toolchain)
 
     elif compiler == 'clang':
+        env['COMPILER_NAME'] = compilerName + compiler
+        env['COMPILER_FAMILY'] = compiler
+        env['CC'] = toolchain + compiler
         env['SETUPCONFIG_TOOLCHAIN'] = clang.Clang(env, toolchain)
+
+    elif compiler == 'cc' or compiler == None:
+        # Using CC and CXX variable
+        print("Using CC environment variable")
+        if os.environ["CC"].endswith('ccc-analyzer'):
+            env['COMPILER_NAME'] = 'gcc'
+            env['COMPILER_FAMILY'] = 'gcc'
+            env['CC'] = os.environ["CC"]
+            env['SETUPCONFIG_TOOLCHAIN'] = clang.ClangStaticAnalyzer(env)
 
     print("Toolchain: " + toolchain)
     print("C Compiler: " + env['CC'])
@@ -53,11 +64,17 @@ def enableMultiThreading(env, multiThreading = MULTI_THREADING_OFF):
 def enableWarningAsError(env):
     env['SETUPCONFIG_TOOLCHAIN'].enableWarningAsError(env)
 
+def disableWarningAsError(env):
+    env['SETUPCONFIG_TOOLCHAIN'].disableWarningAsError(env)
+
 def saveTemps(env):
     env['SETUPCONFIG_TOOLCHAIN'].saveTemps(env)
 
 def stopAtAssembler(env):
     env['SETUPCONFIG_TOOLCHAIN'].stopAtAssembler(env)
+
+def enableSse2(env):
+    env['SETUPCONFIG_TOOLCHAIN'].enableSse2(env)
 
 class Submodule:
     def __init__(self, name, commitHash):

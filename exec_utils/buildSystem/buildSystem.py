@@ -7,8 +7,8 @@ buildSystem = Scons()
 def initBuildSystem(workingDir, mode):
     return buildSystem.init(workingDir, mode)
 
-def buildBuildSystem(target, mode, runMode, compiler, verbose, singleThreaded):
-    return buildSystem.build(target, mode, runMode, compiler, verbose, singleThreaded)
+def buildBuildSystem(target, mode, runMode, compiler, verbose, singleThreaded, prependCommand = None):
+    return buildSystem.build(target, mode, runMode, compiler, verbose, singleThreaded, prependCommand)
 
 def cleanBuildSystem(target, mode, compiler, verbose):
     return buildSystem.clean(target, mode, compiler, verbose)

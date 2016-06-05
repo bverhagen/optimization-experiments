@@ -27,5 +27,9 @@ valgrind:
     stage: test
 
 cppcheck:
-    script: "./exec.py init cppcheck"
+    script: "./exec.py init analyze -a cppcheck"
+    stage: test
+
+clang-static-analyzer:
+    script: "./exec.py distclean init analyze -a clang"
     stage: test
