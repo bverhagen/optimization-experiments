@@ -13,6 +13,7 @@ addons:
             - scons
             - valgrind
             - cppcheck
+            - scan-build
 
 language: c++
 
