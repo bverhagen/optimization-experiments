@@ -7,11 +7,6 @@ includes = [
     'include',
 ]
 
-if env['COMPILER_FAMILY'] == 'gcc':
-    includes.append('include/compiler-specific/gcc')
-elif env['COMPILER_FAMILY'] == 'clang':
-    includes.append('include/compiler-specific/clang')
-
 libs = [
     'common'
 ]
