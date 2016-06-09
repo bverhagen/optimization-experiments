@@ -9,7 +9,7 @@ def analyzeClang(mode, target, verbose):
 def analyzeCppcheck(target, verbose):
     binary_name = 'cppcheck'
     if not isInstalled(binary_name):
-        print('Please install cppcheck or add it to your path.')
+        print('Please install ' + binary_name + ' or add it to your path.')
 
     includes = getAllDirsThatContainPattern(getSrcDir(), '.h')
 
@@ -37,8 +37,20 @@ def analyzeCppcheck(target, verbose):
         print('Cppcheck found major issues.')
     return retValue
 
+def analyzeCpplint(target, verbose):
+    binary_name = 'cpplint'
+    if not isInstalled(binary_name):
+        print('Please install ' + binary_name + ' or add it to your path.')
+
+    cmd = [binary_name]
+    cmd.append('--filter=-legal/copyright,-whitespace/parens,-build/include,-whitespace/line_length,-runtime/references')
+    cmd.append('src/simd-and/src/benchmark-simd-and-vector.cpp')
+    return isSuccess(executeInShell(cmd))
+
 def analyzeBuildSystem(method, mode, target, verbose):
     if method == 'clang':
         return analyzeClang(mode, target, verbose)
     if method == 'cppcheck':
         return analyzeCppcheck(target, verbose)
+    if method == 'cpplint':
+        return analyzeCpplint(target, verbose)
