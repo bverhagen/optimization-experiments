@@ -8,7 +8,7 @@
 #endif
 
 namespace SimdAnd {
-#if defined(__GNUC__)
+#if defined(__GCC__)
 	const size_t BIGGEST_ALIGNMENT = __BIGGEST_ALIGNMENT__;
 	typedef std::uint8_t v4uint8_t __attribute__ ((vector_size (__BIGGEST_ALIGNMENT__ / sizeof(std::uint8_t))));	
 
