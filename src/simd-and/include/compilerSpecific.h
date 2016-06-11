@@ -8,13 +8,16 @@
 #endif
 
 namespace SimdAnd {
-#if defined(__GCC__)
+#if defined(__clang__) && defined(__GNUC__)
+	const size_t BIGGEST_ALIGNMENT = 16;            // Hard code to 16 bytes for now
+	typedef std::uint8_t v4uint8_t __attribute__((__aligned__(BIGGEST_ALIGNMENT)));	
+
+#elif defined(__GNUC__)
 	const size_t BIGGEST_ALIGNMENT = __BIGGEST_ALIGNMENT__;
 	typedef std::uint8_t v4uint8_t __attribute__ ((vector_size (__BIGGEST_ALIGNMENT__ / sizeof(std::uint8_t))));	
 
-#elif defined(__clang__)
-	const size_t BIGGEST_ALIGNMENT = 16;            // Hard code to 16 bytes for now
-	typedef std::uint8_t v4uint8_t __attribute__((__aligned__(BIGGEST_ALIGNMENT)));	
+#else
+#error Compiler is not supported for vector alignment
 
 #endif
 }
