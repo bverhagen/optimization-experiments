@@ -8,7 +8,7 @@ benchmark_env = env.Clone()
 setupTools.disableWarningAsError(benchmark_env)
 
 # Download the library
-benchmark_env.Command('benchmark/src/benchmark.cc', 'benchmark.commit', 'git submodule init 3rdparty/benchmark && git submodule update 3rdparty/benchmark')
+benchmark_env.Command(['benchmark/src/benchmark.cc', 'benchmark/include/benchmark/benchmark.h'], 'benchmark.commit', 'git submodule init 3rdparty/benchmark && git submodule update 3rdparty/benchmark && cp 3rdparty/benchmark/include/benchmark/benchmark.h ' + env['THIRD_PARTY_DIR'] + '/benchmark/include/benchmark/')
 
 # Build the library
 cmake_options = [
