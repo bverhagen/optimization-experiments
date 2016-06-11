@@ -46,7 +46,7 @@ namespace SimdAnd {
 				const size_t nbOfElements = 1024U;
 				
 				test_type_t input1[nbOfElements];
-				Common::randomInput(input1, nbOfElements);
+				Common::randomInput(nbOfElements, input1);
 				test_type_t input2[nbOfElements];
 				for(size_t i = 0; i < nbOfElements; ++i) {
 					input2[i] = 0xFF;
@@ -70,7 +70,7 @@ namespace SimdAnd {
 
 				test_type_t input1[nbOfElements];
 				test_type_t input2[nbOfElements];
-				Common::randomInput(input1, input2, nbOfElements);
+				Common::randomInput(nbOfElements, input1, input2);
 			
 				WHEN("We apply the inputs on different kinds of AND implementations") {
 					test_type_t actual_result_normal[nbOfElements];
@@ -92,8 +92,8 @@ namespace SimdAnd {
 
 				v4uint8_t input1[nbOfElements];
 				v4uint8_t input2[nbOfElements];
-				Common::randomInput( (test_type_t*)(input1), (test_type_t*)(input2), nbOfRealElements);
-			
+				Common::randomInput( nbOfRealElements, reinterpret_cast<test_type_t*>(input1), reinterpret_cast<test_type_t*>(input2));
+
 				WHEN("We apply the inputs on different kinds of AND implementations") {
 					test_type_t actual_result_normal[nbOfRealElements];
 					simdAnd((test_type_t*) input1, (test_type_t*) input2, (test_type_t*) actual_result_normal, nbOfRealElements);

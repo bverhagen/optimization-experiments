@@ -13,7 +13,7 @@ namespace Performance {
         v4uint8_t input2[nbOfElements];
         v4uint8_t output[nbOfElements];
 
-        Common::randomInput(input1, input2, state.range_x());
+        Common::randomInput(state.range_x(), input1, input2);
 
         while(state.KeepRunning()) {
             simdAnd(input1, input2, output, nbOfElements);

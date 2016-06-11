@@ -7,7 +7,7 @@ namespace SimdAnd {
             const size_t nbOfElements = state.range_x();
             simdAnd_t input1[nbOfElements];
             simdAnd_t input2[nbOfElements];
-            Common::randomInput(input1, input2, nbOfElements);
+            Common::randomInput(nbOfElements, input1, input2);
 
             uint8_t output[nbOfElements];
             while(state.KeepRunning()) {
