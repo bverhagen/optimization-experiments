@@ -7,7 +7,7 @@ stages:
     - test
 
 build-all:
-    script: "./exec.py init build --target all --compiler gcc clang --build-single-threaded"
+    script: "./exec.py init build --target all --compiler gcc clang"
     stage: build
 
 unittest:
