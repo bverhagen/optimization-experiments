@@ -22,10 +22,11 @@ addons:
 language: c++
 
 env:
-    - EXEC='init build --target all --compiler gcc clang'
+    - EXEC='init build --target all --compiler gcc'
+    - EXEC='init build --target all --compiler clang --toolchain-path $(pwd)/clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04/bin'
     - EXEC='init build run --compiler gcc clang --run unittest --target all'
-    - EXEC='init build run --compiler --valgrind --run unittest --target all'
-    - EXEC='init build run --compiler --run performance --target all'
+    - EXEC='init build run --compiler gcc clang --valgrind --run unittest --target all'
+    - EXEC='init build run --compiler gcc clang --run performance --target all'
     - EXEC='init analyze -a cppcheck'
     - EXEC='init analyze -a clang'
 

@@ -73,7 +73,7 @@ def main():
     parser.add_argument('-s', '--build-single-threaded', action='store_true', help="Build in single threaded mode")
     parser.add_argument('-a', '--analyze-method', nargs='+', choices=analyzeOptions, default=['clang'],
 		   help="Run analysis.")
-    parser.add_argument('-p', '--toolchain-path', default=[''],
+    parser.add_argument('-p', '--toolchain-path', nargs=1, default=[''],
 		   help="Path to the compiler")
 
     args = parser.parse_args()
@@ -81,7 +81,7 @@ def main():
     print('Build mode = {0}'.format(args.mode))
     print('Target = {0}'.format(listToString(args.target, ' - ')))
 
-    sys.exit(execute(args.commands, args.mode, args.target, args.run, args.compiler, args.valgrind, args.verbose_make, args.build_single_threaded, args.analyze_method, args.toolchain_path))
+    sys.exit(execute(args.commands, args.mode, args.target, args.run, args.compiler, args.valgrind, args.verbose_make, args.build_single_threaded, args.analyze_method, args.toolchain_path[0]))
 
 if __name__ == "__main__":
     main()
