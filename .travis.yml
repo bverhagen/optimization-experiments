@@ -26,7 +26,7 @@ env:
     - EXEC='init analyze -a clang'
 
 script: 
-    - wget 'https://raw.githubusercontent.com/llvm-mirror/clang/master/tools/scan-build/bin/scan-build' && mkdir bin && mv scan-build bin/ && export PATH=$PATH:$(pwd)/bin && ./exec $EXEC
+    - wget 'https://raw.githubusercontent.com/llvm-mirror/clang/master/tools/scan-build/bin/scan-build' && mkdir bin && chmod +x scan-build && mv scan-build bin/ && export PATH=$PATH:$(pwd)/bin && ./exec $EXEC
 
 
 compiler: 
