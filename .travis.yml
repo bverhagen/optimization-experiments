@@ -5,6 +5,10 @@ before_install:
 before_install:
     - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
 
+install:
+    # Install more recent clang
+    - wget 'llvm.org/releases/3.8.0/clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04.tar.xz' && tar -xf 'clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04.tar.xz' && ls -l
+
 addons:
     apt:
         packages:
@@ -26,7 +30,7 @@ env:
     - EXEC='init analyze -a clang'
 
 script: 
-    - wget 'https://raw.githubusercontent.com/llvm-mirror/clang/master/tools/scan-build/bin/scan-build' && mkdir bin && chmod +x scan-build && mv scan-build bin/ && export PATH=$PATH:$(pwd)/bin && ./exec $EXEC
+    - ./exec $EXEC
 
 
 compiler: 
