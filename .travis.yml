@@ -22,20 +22,15 @@ addons:
 language: c++
 
 env:
-    - EXEC='init build --target all'
-    - EXEC='init build run --run unittest --target all'
-    - EXEC='init build run --valgrind --run unittest --target all'
-    - EXEC='init build run --run performance --target all'
+    - EXEC='init build --target all --compiler gcc clang'
+    - EXEC='init build run --compiler gcc clang --run unittest --target all'
+    - EXEC='init build run --compiler --valgrind --run unittest --target all'
+    - EXEC='init build run --compiler --run performance --target all'
     - EXEC='init analyze -a cppcheck'
     - EXEC='init analyze -a clang'
 
 script: 
     - ./exec $EXEC
-
-
-compiler: 
-    - gcc
-    - clang
 
 ## Hacks to make Travis handle git submodules properly
 # Handle git submodules yourself
