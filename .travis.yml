@@ -18,14 +18,16 @@ addons:
 language: c++
 
 env:
-    - EXEC='distclean init build --target all'
-    - EXEC='distclean init build run --run unittest --target all'
-    - EXEC='distclean init build run --valgrind --run unittest --target all'
-    - EXEC='distclean init build run --run performance --target all'
+    - EXEC='init build --target all'
+    - EXEC='init build run --run unittest --target all'
+    - EXEC='init build run --valgrind --run unittest --target all'
+    - EXEC='init build run --run performance --target all'
     - EXEC='init analyze -a cppcheck'
-    - EXEC='wget https://raw.githubusercontent.com/llvm-mirror/clang/master/tools/scan-build/bin/scan-build && mv scan-build /usr/bin/  && distclean init analyze -a clang'
+    - EXEC='init analyze -a clang'
 
-script: ./exec $EXEC
+script: 
+    - wget 'https://raw.githubusercontent.com/llvm-mirror/clang/master/tools/scan-build/bin/scan-build' && mv scan-build /usr/bin/ && ./exec $EXEC
+
 
 compiler: 
     - gcc
