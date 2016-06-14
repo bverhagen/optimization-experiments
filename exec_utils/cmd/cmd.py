@@ -9,8 +9,8 @@ from ..analyze.analyze import *
 def init(workingDir, mode):
     return initVcs() and initBuildSystem(workingDir, mode)
 
-def build(target, mode, runMode, compiler, verbose, singleThreaded):
-    return buildBuildSystem(target, mode, runMode, compiler, verbose, singleThreaded)
+def build(target, mode, runMode, compiler, toolchainPath, verbose, singleThreaded):
+    return buildBuildSystem(target, mode, runMode, compiler, toolchainPath, verbose, singleThreaded)
 
 def clean(target, mode, compiler, verbose):
     return cleanBuildSystem(target, mode, compiler, verbose)

@@ -9,7 +9,7 @@ import sys
 EXIT_SUCCESS = 0
 EXIT_ERROR = 1
 
-def execute(commands, mode, targets, runTargets, compilers, valgrind, verbose, singleThreaded, analyzeMethods):
+def execute(commands, mode, targets, runTargets, compilers, valgrind, verbose, singleThreaded, analyzeMethods, toolchainPath):
     for command in commands:
         if(command == 'init'):
             if not init(getCurrentDir(), mode):
@@ -18,7 +18,7 @@ def execute(commands, mode, targets, runTargets, compilers, valgrind, verbose, s
             for target in targets:
                 for runMode in runTargets:
                     for compiler in compilers:
-                        if not build(target, mode, runMode, compiler, verbose, singleThreaded):
+                        if not build(target, mode, runMode, compiler, toolchainPath, verbose, singleThreaded):
                             return EXIT_ERROR
         elif(command == 'clean'):
             for target in targets:
@@ -73,13 +73,15 @@ def main():
     parser.add_argument('-s', '--build-single-threaded', action='store_true', help="Build in single threaded mode")
     parser.add_argument('-a', '--analyze-method', nargs='+', choices=analyzeOptions, default=['clang'],
 		   help="Run analysis.")
+    parser.add_argument('-p', '--toolchain-path', default=[''],
+		   help="Path to the compiler")
 
     args = parser.parse_args()
     print('Commands = {0}'.format(listToString(args.commands, ' - ')))
     print('Build mode = {0}'.format(args.mode))
     print('Target = {0}'.format(listToString(args.target, ' - ')))
 
-    sys.exit(execute(args.commands, args.mode, args.target, args.run, args.compiler, args.valgrind, args.verbose_make, args.build_single_threaded, args.analyze_method))
+    sys.exit(execute(args.commands, args.mode, args.target, args.run, args.compiler, args.valgrind, args.verbose_make, args.build_single_threaded, args.analyze_method, args.toolchain_path))
 
 if __name__ == "__main__":
     main()

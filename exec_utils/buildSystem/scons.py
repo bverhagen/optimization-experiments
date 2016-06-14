@@ -16,7 +16,7 @@ class Scons:
     def init(self, workingDir, mode):
         return True
 
-    def build(self, target, mode, runMode, compiler, verbose, singleThreaded, prependCommand = None):
+    def build(self, target, mode, runMode, compiler, toolchainPath, verbose, singleThreaded, prependCommand = None):
         if prependCommand is None:
             build_command = self.getBuildCommand()
         else:
@@ -30,6 +30,8 @@ class Scons:
             build_command.append('-j8')
 
         build_command.append('compiler=' + compiler) 
+        if toolchainPath is not None and toolchainPath != '':
+            build_command.append('toolchainPath=' + toolchainPath)
 
         if(not target or target == 'all'):
             print("Building default targets in {0} mode".format(mode))
