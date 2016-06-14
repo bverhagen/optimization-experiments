@@ -13,6 +13,7 @@ addons:
             - scons
             - valgrind
             - cppcheck
+            - wget
 
 language: c++
 
@@ -22,7 +23,7 @@ env:
     - EXEC='distclean init build run --valgrind --run unittest --target all'
     - EXEC='distclean init build run --run performance --target all'
     - EXEC='init analyze -a cppcheck'
-    - EXEC='distclean init analyze -a clang'
+    - EXEC='wget https://raw.githubusercontent.com/llvm-mirror/clang/master/tools/scan-build/bin/scan-build && mv scan-build /usr/bin/  && distclean init analyze -a clang'
 
 script: ./exec $EXEC
 
