@@ -9,7 +9,7 @@ install:
     # Install more recent clang
     - wget 'llvm.org/releases/3.8.0/clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04.tar.xz' && tar -xf 'clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04.tar.xz' && export PATH=$(pwd)/clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04/bin:$PATH
     # Install latest cppcheck
-    - wget https://github.com/danmar/cppcheck/archive/master.zip && unzip master.zip && make -C cppcheck-master -j SRCDIR=build CFGDIR=cfg HAVE_RULES=yes CXXFLAGS="-O2 -DNDEBUG -Wall -Wno-sign-compare -Wno-unused-function" && export PATH=$(pwd)/cppcheck-master:$PATH
+    - wget https://github.com/danmar/cppcheck/archive/master.zip && unzip master.zip && make -C cppcheck-master -j SRCDIR=build CFGDIR=$(pwd)/cppcheck-master/cfg HAVE_RULES=yes CXXFLAGS="-O2 -DNDEBUG -Wall -Wno-sign-compare -Wno-unused-function" && export PATH=$(pwd)/cppcheck-master:$PATH
 
 addons:
     apt:
