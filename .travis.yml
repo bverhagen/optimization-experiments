@@ -26,9 +26,12 @@ compiler: gcc
 env:
     - EXEC='init build --target all --compiler gcc'
     - EXEC="init build --target all --compiler clang --toolchain-path ${PWD}/clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04/bin"
-    - EXEC='init build run --compiler gcc clang --run unittest --target all'
-    - EXEC='init build run --compiler gcc clang --valgrind --run unittest --target all'
-    - EXEC='init build run --compiler gcc clang --run performance --target all'
+    - EXEC='init build run --compiler gcc --run unittest --target all'
+    - EXEC="init build run --compiler clang --run unittest --target all --toolchain-path ${PWD}/clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04/bin"
+    - EXEC='init build run --compiler gcc --valgrind --run unittest --target all'
+    - EXEC="init build run --compiler clang --valgrind --run unittest --target all --toolchain-path ${PWD}/clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04/bin"
+    - EXEC='init build run --compiler gcc --run performance --target all'
+    - EXEC="init build run --compiler clang --run performance --target all --toolchain-path ${PWD}/clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04/bin"
     - EXEC='init analyze -a cppcheck'
     - EXEC='init analyze -a clang'
 

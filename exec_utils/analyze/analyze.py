@@ -4,7 +4,7 @@ from ..util.util import *
 from ..buildSystem.buildSystem import *
 
 def analyzeClang(mode, target, verbose):
-    return buildBuildSystem(target, mode, 'target', 'CC', verbose, False, prependCommand = ['scan-build', '-o', 'build/clang-static-analyze'])
+    return buildBuildSystem(target, mode, 'target', 'CC', '', verbose, False, prependCommand = ['scan-build', '-o', 'build/clang-static-analyze'])
 
 def analyzeCppcheck(target, verbose):
     binary_name = 'cppcheck'
