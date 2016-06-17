@@ -19,7 +19,6 @@ addons:
             - scons
             - valgrind
             - wget
-            - simian
 
 language: c++
 
@@ -36,7 +35,6 @@ env:
     - EXEC="init build run --compiler clang --run performance --target all --toolchain-path ${PWD}/clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04/bin"
     - EXEC='analyze -a cppcheck'
     - EXEC='init analyze -a clang'
-    - EXEC='analyze -a simian'
 
 script: 
     - PWD=$(pwd) ./exec $EXEC
