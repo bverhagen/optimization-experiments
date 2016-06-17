@@ -19,6 +19,7 @@ addons:
             - scons
             - valgrind
             - wget
+            - simian
 
 language: c++
 
@@ -33,8 +34,9 @@ env:
     - EXEC="init build run --compiler clang --valgrind --run unittest --target all --toolchain-path ${PWD}/clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04/bin"
     - EXEC='init build run --compiler gcc --run performance --target all'
     - EXEC="init build run --compiler clang --run performance --target all --toolchain-path ${PWD}/clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04/bin"
-    - EXEC='init analyze -a cppcheck'
+    - EXEC='analyze -a cppcheck'
     - EXEC='init analyze -a clang'
+    - EXEC='analyze -a simian'
 
 script: 
     - PWD=$(pwd) ./exec $EXEC
@@ -44,8 +46,8 @@ script:
 git:
     submodules: false
 
-# Require for apt
+# Require sudo for apt
 sudo: required
 
-# Hack to get a more up to date version of CMake
+# Hack to get a more up to date version of Ubuntu
 dist: trusty

@@ -11,7 +11,7 @@ def analyzeCppcheck(target, verbose):
     if not isInstalled(binary_name):
         print('Please install ' + binary_name + ' or add it to your path.')
 
-    includes = getAllDirsThatContainPattern(getSrcDir(), '.h')
+    includes = getAllDirsThatContainPattern(getSrcDir(), '*.h')
 
     targetDir = getSrcDir(target)
 
@@ -47,10 +47,34 @@ def analyzeCpplint(target, verbose):
     cmd.append('src/simd-and/src/benchmark-simd-and-vector.cpp')
     return isSuccess(executeInShell(cmd))
 
+def analyzeSimian(target, verbose):
+    binary_name = 'simian'
+    if not isInstalled(binary_name):
+        print('Please install ' + binary_name + ' or add it to your path.')
+
+    cmd = [binary_name]
+    if target == '' or target is None or target == 'all':
+        # Since subprocess expands wildcards in path itself rather than passing it to the shell, we let python create an exhaustive list of files to parse
+        files = findAllFilesPattern(getSrcDir(), '*.cpp')
+    else:
+        files = findAllFilesPattern(getSrcDir() + '/' + target, '*.cpp')
+
+    if not files:
+        print('Warning: did not find any files to check.')
+        return True
+
+    cmd.append(' '.join(files))
+    return isSuccess(executeInShell(cmd))
+
 def analyzeBuildSystem(method, mode, target, verbose):
     if method == 'clang':
         return analyzeClang(mode, target, verbose)
-    if method == 'cppcheck':
+    elif method == 'cppcheck':
         return analyzeCppcheck(target, verbose)
-    if method == 'cpplint':
+    elif method == 'cpplint':
         return analyzeCpplint(target, verbose)
+    elif method == 'simian':
+        return analyzeSimian(target, verbose)
+    else:
+        print('Error: unknown method to analyze project.')
+        return False

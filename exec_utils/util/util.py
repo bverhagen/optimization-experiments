@@ -2,6 +2,8 @@
 
 import os
 import subprocess
+import glob
+import fnmatch
 
 BUILD_DIR = 'build'
 BIN_DIR = 'bin'
@@ -50,8 +52,7 @@ def getSrcDir(target = None):
 def executeInShell(cmd, working_directory = '.'):
     pwd()
     print("\nExecuting '{0}' in '{1}'".format(listToString(cmd, ' '), working_directory))
-    retValue = subprocess.call(cmd, cwd = working_directory)
-    return retValue
+    return subprocess.call(cmd, cwd = working_directory)
 
 def getShellOutput(cmd, working_directory = '.'):
     print("\nExecuting '{0}' in '{1}'".format(listToString(cmd, ' '), working_directory))
@@ -73,11 +74,34 @@ def getAllFiles(path):
     for root, dirs, files in os.walk(path):
         return files
 
+def getAllFilesRecursive(rootDir, includePath=False):
+    allFiles = []
+    for root, dirs, files in os.walk(rootDir):
+        for file in files:
+            if includePath:
+                allFiles.append(os.path.join(root,file))
+            else:
+                allFiles.append(file)
+    return allFiles
+
+def findAllFilesPattern(rootDir, pattern):
+    try:
+        # TODO: this is not backwards compatible with python 2.x until python 3.4
+        return glob.glob(rootDir + '/**/*' + pattern, recursive=True)
+    except TypeError:
+        fileList = []
+        files = getAllFilesRecursive(rootDir, True)
+        for file in files:
+            if fnmatch.fnmatch(file, pattern):
+                fileList.append(file)
+
+        return fileList
+
 def getAllDirsThatContainPattern(rootDir, extension):
     uniqueDirs = set()
     for root, dirs, files in os.walk(rootDir):
         for file in files:
-            if file.endswith(extension):
+            if fnmatch.fnmatch(file, extension):
                 uniqueDirs.add(root)
     return list(uniqueDirs)
 
