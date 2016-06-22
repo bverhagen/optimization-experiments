@@ -44,3 +44,6 @@ __pycache__/
 
 # Scons files
 .sconsign.dblite
+
+# 3rdparty installs
+pmd-*

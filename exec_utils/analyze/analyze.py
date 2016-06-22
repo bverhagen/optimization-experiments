@@ -66,6 +66,29 @@ def analyzeSimian(target, verbose):
     cmd.append(' '.join(files))
     return isSuccess(executeInShell(cmd))
 
+def analyzeCpd(target, verbose):
+    binary_name = '3rdparty/pmd/pmd.sh'
+    cmd = [binary_name, 'cpd']
+    cmd.extend(['--minimum-tokens', '50'])
+    cmd.extend(['--language', 'cpp'])
+
+    if target == '' or target is None or target == 'all':
+        # Since subprocess expands wildcards in path itself rather than passing it to the shell, we let python create an exhaustive list of files to parse
+        files = findAllFilesPattern(getSrcDir(), '*.cpp')
+        includes = findAllFilesPattern(getSrcDir(), '*.h')
+    else:
+        files = findAllFilesPattern(getSrcDir() + '/' + target, '*.cpp')
+        includes = findAllFilesPattern(getSrcDir() + '/' + target, '*.h')
+
+    if not files:
+        print('Warning: did not find any files to check.')
+        return True
+
+    cmd.append('--files')
+    cmd.append(' '.join(files))
+    cmd.append(' '.join(includes))
+    return isSuccess(executeInShell(cmd))
+
 def analyzeBuildSystem(method, mode, target, verbose):
     if method == 'clang':
         return analyzeClang(mode, target, verbose)
@@ -75,6 +98,8 @@ def analyzeBuildSystem(method, mode, target, verbose):
         return analyzeCpplint(target, verbose)
     elif method == 'simian':
         return analyzeSimian(target, verbose)
+    elif method == 'cpd':
+        return analyzeCpd(target, verbose)
     else:
         print('Error: unknown method to analyze project.')
         return False
