@@ -4,6 +4,10 @@ lib_files = [
 	'benchmark.cpp'
 ]
 
+env['LIB_BENCHMARK_INCLUDES'] = [
+    env['ROOT_DIR'] + '/src/benchmark'
+]
+
 # Export specifics
 env['LIB_BENCHMARK'] = [
     'benchmark-main'

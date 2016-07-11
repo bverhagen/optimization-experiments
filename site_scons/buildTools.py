@@ -63,13 +63,15 @@ def createBenchmark(env, name, sources, includes, libs, libs_path, TEMPS = []):
 
     env_benchmark['CPPPATH'].extend(includes)
 
+    addIncludeUsageRequirement(env, 'benchmark', env['CPPPATH'])
+    addIncludeUsageRequirement(env_benchmark, 'benchmark', env_benchmark['CPPPATH'])
     for lib in libs:
         addIncludeUsageRequirement(env_benchmark, lib, env_benchmark['CPPPATH'])
 
     target = env_benchmark.Program(name, sources, LIBS=libs_benchmark, LIBPATH=libs_path)
-    installed_bin = env.Install("{bin_dir}".format(bin_dir=env['BENCHMARK_BIN_DIR']), target)
-    env.Alias(name, installed_bin)
-    env.Alias("benchmarks", installed_bin)
+    installed_bin = env_benchmark.Install("{bin_dir}".format(bin_dir=env['BENCHMARK_BIN_DIR']), target)
+    env_benchmark.Alias(name, installed_bin)
+    env_benchmark.Alias("benchmarks", installed_bin)
 
     targetList = [installed_bin]
 
@@ -95,10 +97,11 @@ def createAssembler(env, name, sources, includes, libs, libs_path):
     for source in sources:
         targetFile = os.path.splitext(source.rstr())[0]+'.s'
         target = env_benchmark.StaticObject(targetFile, source )
+        targets.append(target)
         env.Alias(name, target)
         env.Alias("benchmarks", target)
 
-    return target
+    return targets
 
 def createLib(env, name, sources, includes, includeUsageRequirements):
     createIncludeUsageRequirement(env, name, includeUsageRequirements)
