@@ -1,6 +1,6 @@
 before_script:
     - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
-    - apt-get update -qq && apt-get install --yes -qq cmake python3 scons valgrind gcc clang cppcheck unzip
+    - apt-get update -qq && apt-get install --yes -qq cmake python3 scons gcc clang
 
 stages:
     - build
@@ -23,11 +23,15 @@ run-benchmarks-clang:
     stage: test
 
 valgrind:
-    script: "./exec.py init build run --target all --run unittest --valgrind --compiler gcc clang"
+    script: 
+        - apt-get install --yes -qq valgrind
+        - "./exec.py init build run --target all --run unittest --valgrind --compiler gcc clang"
     stage: test
 
 cppcheck:
-    script: "./exec.py analyze -a cppcheck"
+    script: 
+        - apt-get install --yes -qq cppcheck unzip
+        - "./exec.py analyze -a cppcheck"
     stage: test
 
 clang-static-analyzer:
@@ -35,5 +39,7 @@ clang-static-analyzer:
     stage: test
 
 pmd-cpd:
-    script: "./exec.py analyze -a cpd"
+    script: 
+        - apt-get install --yes -qq default-jre
+        - "./exec.py analyze -a cpd"
     stage: test

@@ -19,6 +19,7 @@ addons:
             - scons
             - valgrind
             - wget
+            - default-jre
 
 language: c++
 
