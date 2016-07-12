@@ -43,3 +43,9 @@ pmd-cpd:
         - apt-get install --yes -qq default-jre unzip
         - "./exec.py analyze -a cpd"
     stage: test
+
+python2-compatibility:
+    script:
+        - apt-get install --yes -qq python2
+        - "python2 exec.py distclean clean init build run rebuild analyze -m debug release -t all -r all -c gcc clang --valgrind -a clang"
+    stage: test
