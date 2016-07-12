@@ -20,6 +20,7 @@ addons:
             - valgrind
             - wget
             - default-jre
+            - perf
 
 language: c++
 
@@ -37,6 +38,7 @@ env:
     - EXEC='analyze -a cppcheck'
     - EXEC='init analyze -a clang'
     - EXEC='analyze -a cpd'
+    - EXEC='init build run --compiler gcc --run performance --target all --profile-method perf'
 
 script: 
     - PWD=$(pwd) ./exec $EXEC

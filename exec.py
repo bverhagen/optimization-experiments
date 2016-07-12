@@ -9,7 +9,7 @@ import sys
 EXIT_SUCCESS = 0
 EXIT_ERROR = 1
 
-def execute(commands, mode, targets, runTargets, compilers, valgrind, verbose, singleThreaded, analyzeMethods, toolchainPath):
+def execute(commands, mode, targets, runTargets, compilers, valgrind, verbose, singleThreaded, analyzeMethods, toolchainPath, profileMethods):
     for command in commands:
         if(command == 'init'):
             if not init(getCurrentDir(), mode):
@@ -34,13 +34,15 @@ def execute(commands, mode, targets, runTargets, compilers, valgrind, verbose, s
                 return EXIT_ERROR
         elif(command == 'run'):
             for compiler in compilers:
-                if not run(targets, mode, runTargets, compiler, valgrind):
-                    return EXIT_ERROR
+                for profileMethod in profileMethods:
+                    if not run(targets, mode, runTargets, compiler, profileMethod, valgrind):
+                        return EXIT_ERROR
         elif(command == 'analyze'):
             for analyzeMethod in analyzeMethods:
                 for target in targets:
                     if not analyze(analyzeMethod, mode, target, verbose):
                         return EXIT_ERROR
+
         else:
             print("Error: invalid command")
             return EXIT_ERROR
@@ -56,6 +58,7 @@ def main():
     runTargetOptions = ['unittest', 'performance', 'all']
     compilerOptions = ['gcc', 'clang']
     analyzeOptions = ['clang', 'cppcheck', 'cpplint', 'simian', 'cpd']
+    profileOptions = ['none', 'perf']
 
     parser = argparse.ArgumentParser(description='Convenience script for executing commands')
     parser.add_argument('commands', metavar='commands', nargs='+', choices=commandOptions,
@@ -73,6 +76,8 @@ def main():
     parser.add_argument('-s', '--build-single-threaded', action='store_true', help="Build in single threaded mode")
     parser.add_argument('-a', '--analyze-method', nargs='+', choices=analyzeOptions, default=['clang'],
 		   help="Run analysis.")
+    parser.add_argument('-l', '--profile-method', nargs='+', choices=profileOptions, default=['none'],
+		   help="Select performance tool.")
     parser.add_argument('-p', '--toolchain-path', nargs=1, default=[''],
 		   help="Path to the compiler")
 
@@ -81,7 +86,7 @@ def main():
     print('Build mode = {0}'.format(args.mode))
     print('Target = {0}'.format(listToString(args.target, ' - ')))
 
-    sys.exit(execute(args.commands, args.mode, args.target, args.run, args.compiler, args.valgrind, args.verbose_make, args.build_single_threaded, args.analyze_method, args.toolchain_path[0]))
+    sys.exit(execute(args.commands, args.mode, args.target, args.run, args.compiler, args.valgrind, args.verbose_make, args.build_single_threaded, args.analyze_method, args.toolchain_path[0], args.profile_method))
 
 if __name__ == "__main__":
     main()

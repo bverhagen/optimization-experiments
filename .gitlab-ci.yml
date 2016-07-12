@@ -49,3 +49,9 @@ python2-compatibility:
         - apt-get install --yes -qq python2
         - "python2 exec.py distclean clean init build run rebuild analyze -m debug release -t all -r all -c gcc clang --valgrind -a clang"
     stage: test
+
+perf-profiling:
+    script:
+        - apt-get install --yes -qq perf
+        - ./exec.py init build run --profile-method perf -r performance
+    stage: test

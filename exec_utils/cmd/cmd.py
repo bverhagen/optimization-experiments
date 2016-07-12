@@ -19,8 +19,8 @@ def distclean(mode, compiler):
     return distcleanBuildSystem(mode, compiler)
     # TODO: Use python to clean python files
 
-def run(target, mode, runTargets, compiler, valgrind):
-    return runner(target, mode, runTargets, compiler, valgrind)
+def run(target, mode, runTargets, compiler, profileMethod, valgrind):
+    return runner(target, mode, runTargets, compiler, profileMethod, valgrind)
 
 def analyze(method, mode, targets, verbose):
     return analyzeBuildSystem(method, mode, targets, verbose)
