@@ -6,7 +6,7 @@ def runTarget(target, mode, buildDir, profileMethod, valgrind, suffix = ''):
     if(not target or target == 'all'):
         files = getAllFiles(buildDir)
         for entry in files:
-            if not runTarget(entry, mode, buildDir, valgrind):
+            if not runTarget(entry, mode, buildDir, profileMethod, valgrind):
                 return False
         return True
     else:
@@ -16,19 +16,19 @@ def runTarget(target, mode, buildDir, profileMethod, valgrind, suffix = ''):
         if profileMethod == 'none':
             pass
         elif profileMethod == 'perf':
-            outputFile = buildDir + '/perf.data'
+            outputFile = buildDir + '/../perf.data'
             cmd.extend(['perf', 'record', '-o', outputFile]) 
         else:
             print('Invalid profiling method:' + profileMethod) 
             return False
 
         cmd.extend([buildDir + '/' + target + suffix])
-    retCode = executeInShell(cmd)
-    if profileMethod == 'perf':
-        viewCmd = ['perf', 'report', '-i', outputFile] 
-        return executeInShell(viewCmd)
-    else:
-        return retCode
+        retCode = executeInShell(cmd)
+        if profileMethod == 'perf':
+            viewCmd = ['perf', 'report', '-i', outputFile] 
+            return executeInShell(viewCmd)
+        else:
+            return retCode
 
 def runUnittest(target, mode, compiler, profileMethod, valgrind):
     buildDir = getUnittestDir(mode, compiler)
