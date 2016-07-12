@@ -40,6 +40,6 @@ clang-static-analyzer:
 
 pmd-cpd:
     script: 
-        - apt-get install --yes -qq default-jre
+        - apt-get install --yes -qq default-jre unzip
         - "./exec.py analyze -a cpd"
     stage: test
