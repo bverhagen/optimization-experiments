@@ -46,7 +46,7 @@ pmd-cpd:
 
 python2-compatibility:
     script:
-        - "python2 exec.py distclean clean init build run rebuild analyze -m debug release -t all -r all -c gcc clang --valgrind -a clang"
+        - "python2 exec.py distclean clean init build run rebuild analyze -m release -t all -r all -c gcc clang --valgrind -a clang"
     stage: test
 
 perf-profiling:
