@@ -3,7 +3,7 @@ Optimization Experiments
 
 A play ground for my optimization efforts.
 
-[![Build Status](https://travis-ci.org/bverhagen/optimization-experiments.svg?branch=master)](https://travis-ci.org/bverhagen/optimization-experiments)
+Travis: [![Build Status](https://travis-ci.org/bverhagen/optimization-experiments.svg?branch=master)](https://travis-ci.org/bverhagen/optimization-experiments)
 
 Dependencies
 ------------
