@@ -30,7 +30,7 @@ def execute(commands, mode, targets, runTargets, compilers, valgrind, verbose, s
                 if not distclean(mode, compiler):
                     return EXIT_ERROR
         elif(command == 'rebuild'):
-            if not execute(['clean', 'build'], mode, targets, compilers, valgrind, verbose, singleThreaded):
+            if not execute(['clean', 'build'], mode, targets, runTargets, compilers, valgrind, verbose, singleThreaded, analyzeMethods, toolchainPath, profileMethods):
                 return EXIT_ERROR
         elif(command == 'run'):
             for compiler in compilers:
