@@ -13,42 +13,44 @@ def execute(commands, mode, targets, runTargets, compilers, valgrind, verbose, s
     for command in commands:
         if(command == 'init'):
             if not init(getCurrentDir(), mode):
-                return EXIT_ERROR
+                return False
         elif(command == 'build'):
             for target in targets:
                 for runMode in runTargets:
                     for compiler in compilers:
                         if not build(target, mode, runMode, compiler, toolchainPath, verbose, singleThreaded):
-                            return EXIT_ERROR
+                            print("Build failed")
+                            return False
         elif(command == 'clean'):
             for target in targets:
                 for compiler in compilers:
                     if not clean(target, mode, compiler, verbose):
-                        return EXIT_ERROR
+                        print("Clean failed")
+                        return False
         elif(command == 'distclean'):
             for compiler in compilers:
                 if not distclean(mode, compiler):
-                    return EXIT_ERROR
+                    return False
         elif(command == 'rebuild'):
             # TODO: fix clean target
             if not execute(['distclean', 'build'], mode, targets, runTargets, compilers, valgrind, verbose, singleThreaded, analyzeMethods, toolchainPath, profileMethods):
-                return EXIT_ERROR
+                return False
         elif(command == 'run'):
             for compiler in compilers:
                 for profileMethod in profileMethods:
                     if not run(targets, mode, runTargets, compiler, profileMethod, valgrind):
-                        return EXIT_ERROR
+                        return False
         elif(command == 'analyze'):
             for analyzeMethod in analyzeMethods:
                 for target in targets:
                     if not analyze(analyzeMethod, mode, target, verbose):
-                        return EXIT_ERROR
+                        return False
 
         else:
             print("Error: invalid command")
-            return EXIT_ERROR
+            return False
 
-    return EXIT_SUCCESS
+    return True
 
 
 def main():
@@ -87,7 +89,12 @@ def main():
     print('Build mode = {0}'.format(args.mode))
     print('Target = {0}'.format(listToString(args.target, ' - ')))
 
-    sys.exit(execute(args.commands, args.mode, args.target, args.run, args.compiler, args.valgrind, args.verbose_make, args.build_single_threaded, args.analyze_method, args.toolchain_path[0], args.profile_method))
+    retCode = execute(args.commands, args.mode, args.target, args.run, args.compiler, args.valgrind, args.verbose_make, args.build_single_threaded, args.analyze_method, args.toolchain_path[0], args.profile_method)
+
+    if retCode:
+        sys.exit(EXIT_SUCCESS)
+    else:
+        sys.exit(EXIT_ERROR)
 
 if __name__ == "__main__":
     main()
