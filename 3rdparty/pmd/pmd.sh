@@ -9,7 +9,7 @@ cd ${script_dir}
 
 if [ ! -d ${pmd_dir} ]; then
     if [ ! -f "${pmd_dir}.zip" ]; then
-        wget "http://downloads.sourceforge.net/project/pmd/pmd/${pmd_version}/${pmd_dir}.zip"
+        wget "http://ufpr.dl.sourceforge.net/project/pmd/pmd/${pmd_version}/${pmd_dir}.zip"
     fi
 
     echo "Unzipping ${pmd_dir}.zip"
