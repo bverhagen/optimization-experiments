@@ -33,7 +33,7 @@ def execute(commands, mode, targets, runTargets, compilers, valgrind, verbose, s
                     return False
         elif(command == 'rebuild'):
             # TODO: fix clean target
-            if not execute(['distclean', 'build'], mode, targets, runTargets, compilers, valgrind, verbose, singleThreaded, analyzeMethods, toolchainPath, profileMethods):
+            if not execute(['distclean', 'build'], mode, targets, runTargets, compilers, valgrind, verbose, singleThreaded, analyzeMethods, toolchainPath, profileMethods, showStuff):
                 return False
         elif(command == 'run'):
             for compiler in compilers:
