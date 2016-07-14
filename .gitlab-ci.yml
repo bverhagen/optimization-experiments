@@ -53,6 +53,6 @@ python2-compatibility:
 
 perf-profiling:
     script:
-        - apt-get install --yes -qq linux-tools
+        - apt-get install --yes -qq linux-tools-4.6
         - ./exec.py init build run --profile-method perf -r performance
     stage: test
