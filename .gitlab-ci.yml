@@ -53,6 +53,6 @@ python2-compatibility:
 
 perf-profiling:
     script:
-        - apt-get install --yes -qq linux-tools-4.6
+        - wget https://github.com/torvalds/linux/archive/master.zip && pushd linux/tools/perf && make && export PATH=$PATH:$(pwd); popd
         - ./exec.py init build run --profile-method perf -r performance
     stage: test
