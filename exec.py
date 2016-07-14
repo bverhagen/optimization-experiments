@@ -56,8 +56,7 @@ def execute(commands, mode, targets, runTargets, compilers, valgrind, verbose, s
 def main():
     commandOptions = ['init', 'build', 'clean', 'distclean', 'rebuild', 'run', 'analyze']
     buildModeOptions = ['debug', 'release']
-    targetOptions = getAllDirs('{rootDir}/src'.format(rootDir=getCurrentDir()))
-    targetOptions.extend(['all', 'unittest', 'performance'])
+    targetOptions = getAllTargets(getCurrentDir())
     runTargetOptions = ['unittest', 'performance', 'all']
     compilerOptions = ['gcc', 'clang']
     analyzeOptions = ['clang', 'cppcheck', 'cpplint', 'simian', 'cpd']

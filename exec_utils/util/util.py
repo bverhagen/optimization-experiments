@@ -38,11 +38,24 @@ def getBuildDir(mode, compiler):
 def getBinDir(mode):
     return BIN_DIR + '/' + mode
 
-def getUnittestDir(mode, compiler):
-    return getBuildDir(mode, compiler) + '/bin/test/unittest'
+def getAllRealTargets(dir):
+    targets = getAllDirs('{rootDir}/src'.format(rootDir=dir))
+    if targets.count('catch'):
+        targets.remove('catch')
+    if targets.count('benchmark'):
+        targets.remove('benchmark')
+    if targets.count('common'):
+        targets.remove('common')
+    return targets
 
-def getPerformancetestDir(mode, compiler):
-    return getBuildDir(mode, compiler) + '/bin/benchmark'
+def getAllPhonyTargets():
+    return ['all']
+
+def getAllTargets(dir):
+    targets = []
+    targets.extend(getAllRealTargets(dir))
+    targets.extend(getAllPhonyTargets())
+    return targets
 
 def getSrcDir(target = None):
     if target is None or target == 'all':

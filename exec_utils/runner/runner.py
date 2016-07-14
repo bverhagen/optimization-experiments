@@ -1,54 +1,44 @@
 #!/usr/bin/python
 
 from ..util.util import *
+from ..filter.filterchain import FilterChain
+from ..filter.valgrindMemcheck import ValgrindMemcheck
+from ..filter.runUnitTest import RunUnittest
+from ..filter.runPerformanceTest import RunPerformancetest
+from ..filter.perf import Perf
 
-def runTarget(target, mode, buildDir, profileMethod, valgrind, suffix = ''):
-    if(not target or target == 'all'):
-        files = getAllFiles(buildDir)
-        for entry in files:
-            if not runTarget(entry, mode, buildDir, profileMethod, valgrind):
-                return False
-        return True
+def run(target, mode, runTarget, compiler, profileMethod, valgrind):
+    filterchain = FilterChain()
+    if valgrind:
+        filterchain.addFilter(ValgrindMemcheck())
+
+    if profileMethod == 'perf':
+        filterchain.addFilter(Perf(getBuildDir(mode, compiler)))
+
+    if runTarget == 'unittest':
+        filterchain.addFilter(RunUnittest(target, mode, compiler))
+    elif runTarget == 'performance':
+        filterchain.addFilter(RunPerformancetest(target, mode, compiler))
     else:
-        cmd = []
-        if valgrind:
-            cmd.extend(['valgrind', '--tool=memcheck'])
-        if profileMethod == 'none':
-            pass
-        elif profileMethod == 'perf':
-            outputFile = buildDir + '/../perf.data'
-            cmd.extend(['perf', 'record', '-o', outputFile]) 
-        else:
-            print('Invalid profiling method:' + profileMethod) 
-            return False
-
-        cmd.extend([buildDir + '/' + target + suffix])
-        retCode = executeInShell(cmd)
-        if profileMethod == 'perf':
-            viewCmd = ['perf', 'report', '-i', outputFile] 
-            return executeInShell(viewCmd)
-        else:
-            return retCode
-
-def runUnittest(target, mode, compiler, profileMethod, valgrind):
-    buildDir = getUnittestDir(mode, compiler)
-    runTarget(target, mode, buildDir, profileMethod, valgrind, '-unittest')
-
-def runPerformanceTest(target, mode, compiler, profileMethod, valgrind):
-    buildDir = getPerformancetestDir(mode, compiler)
-    runTarget(target, mode, buildDir, profileMethod, valgrind, '-benchmark')
+        print("Invalid run target: " + runTarget)
+        return False
+    if not filterchain.execute():
+        return False
 
 def runner(targets, mode, runTargets, compiler, profileMethod, valgrind):
     for target in targets:
-        for runTarget in runTargets:
-            if(runTarget == 'unittest'):
-                runUnittest(target, mode, compiler, profileMethod, valgrind)
-            elif(runTarget == 'performance'):
-                runPerformanceTest(target, mode, compiler, profileMethod, valgrind)
-            elif(runTarget == 'all'):
-                runUnittest(target, mode, compiler, profileMethod, valgrind)
-                runPerformanceTest(target, mode, compiler, profileMethod, valgrind)
-            else:
-                print("Invalid run target!")
-                return False
-    return True
+        if target == 'all':
+            for target in getAllRealTargets(getCurrentDir()):
+                for runTarget in runTargets:
+                    if runTarget == 'all':
+                        run(target, mode, 'unittest', compiler, profileMethod, valgrind)
+                        run(target, mode, 'performance', compiler, profileMethod, valgrind)
+                    else:
+                        run(target, mode, runTarget, compiler, profileMethod, valgrind)
+        else:
+            for runTarget in runTargets:
+                if runTarget == 'all':
+                    run(target, mode, 'unittest', compiler, profileMethod, valgrind)
+                    run(target, mode, 'performance', compiler, profileMethod, valgrind)
+                else:
+                    run(target, mode, runTarget, compiler, profileMethod, valgrind)
