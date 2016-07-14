@@ -9,7 +9,7 @@ import sys
 EXIT_SUCCESS = 0
 EXIT_ERROR = 1
 
-def execute(commands, mode, targets, runTargets, compilers, valgrind, verbose, singleThreaded, analyzeMethods, toolchainPath, profileMethods):
+def execute(commands, mode, targets, runTargets, compilers, valgrind, verbose, singleThreaded, analyzeMethods, toolchainPath, profileMethods, showStuff):
     for command in commands:
         if(command == 'init'):
             if not init(getCurrentDir(), mode):
@@ -38,7 +38,7 @@ def execute(commands, mode, targets, runTargets, compilers, valgrind, verbose, s
         elif(command == 'run'):
             for compiler in compilers:
                 for profileMethod in profileMethods:
-                    if not run(targets, mode, runTargets, compiler, profileMethod, valgrind):
+                    if not run(targets, mode, runTargets, compiler, profileMethod, valgrind, showStuff):
                         return False
         elif(command == 'analyze'):
             for analyzeMethod in analyzeMethods:
@@ -74,6 +74,7 @@ def main():
     parser.add_argument('-c', '--compiler', nargs='+', choices=compilerOptions, default=['gcc'],
 		   help="Compiler to use.")
     parser.add_argument('-w', '--valgrind', action='store_true', help="Enable valgrind memcheck. Only applicable on the run command")
+    parser.add_argument('-b', '--show-stuff', action='store_true', help="Enable this to automatically open or show the results")
     parser.add_argument('-v', '--verbose-make', action='store_true', help="Enable make in verbose mode")
     parser.add_argument('-s', '--build-single-threaded', action='store_true', help="Build in single threaded mode")
     parser.add_argument('-a', '--analyze-method', nargs='+', choices=analyzeOptions, default=['clang'],
@@ -88,7 +89,7 @@ def main():
     print('Build mode = {0}'.format(args.mode))
     print('Target = {0}'.format(listToString(args.target, ' - ')))
 
-    retCode = execute(args.commands, args.mode, args.target, args.run, args.compiler, args.valgrind, args.verbose_make, args.build_single_threaded, args.analyze_method, args.toolchain_path[0], args.profile_method)
+    retCode = execute(args.commands, args.mode, args.target, args.run, args.compiler, args.valgrind, args.verbose_make, args.build_single_threaded, args.analyze_method, args.toolchain_path[0], args.profile_method, args.show_stuff)
 
     if retCode:
         sys.exit(EXIT_SUCCESS)
