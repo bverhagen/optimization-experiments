@@ -22,8 +22,7 @@ def run(target, mode, runTarget, compiler, profileMethod, valgrind):
     else:
         print("Invalid run target: " + runTarget)
         return False
-    if not filterchain.execute():
-        return False
+    return filterchain.execute()
 
 def runner(targets, mode, runTargets, compiler, profileMethod, valgrind):
     for target in targets:
@@ -31,14 +30,21 @@ def runner(targets, mode, runTargets, compiler, profileMethod, valgrind):
             for target in getAllRealTargets(getCurrentDir()):
                 for runTarget in runTargets:
                     if runTarget == 'all':
-                        run(target, mode, 'unittest', compiler, profileMethod, valgrind)
-                        run(target, mode, 'performance', compiler, profileMethod, valgrind)
+                        if not run(target, mode, 'unittest', compiler, profileMethod, valgrind):
+                            return False
+                        if not run(target, mode, 'performance', compiler, profileMethod, valgrind):
+                            return False
                     else:
-                        run(target, mode, runTarget, compiler, profileMethod, valgrind)
+                        if not run(target, mode, runTarget, compiler, profileMethod, valgrind):
+                            return False
         else:
             for runTarget in runTargets:
                 if runTarget == 'all':
-                    run(target, mode, 'unittest', compiler, profileMethod, valgrind)
-                    run(target, mode, 'performance', compiler, profileMethod, valgrind)
+                    if not run(target, mode, 'unittest', compiler, profileMethod, valgrind):
+                        return False
+                    if not run(target, mode, 'performance', compiler, profileMethod, valgrind):
+                        return False
                 else:
-                    run(target, mode, runTarget, compiler, profileMethod, valgrind)
+                    if not run(target, mode, runTarget, compiler, profileMethod, valgrind):
+                        return False
+    return True

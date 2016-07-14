@@ -26,7 +26,6 @@ class FilterChain:
         cmd = []
         for filter in self.filters:
             cmd = filter.process(cmd)
-            
         return cmd
 
     def postProcess(self):
