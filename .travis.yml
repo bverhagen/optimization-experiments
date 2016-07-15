@@ -20,6 +20,7 @@ addons:
             - valgrind
             - wget
             - default-jre
+            - linux-tools-3.19.0-30-generic
             - linux-tools-generic-lts-trusty
 
 language: c++
