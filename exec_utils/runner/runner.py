@@ -3,6 +3,7 @@
 from ..util.util import *
 from ..filter.filterchain import FilterChain
 from ..filter.valgrindMemcheck import ValgrindMemcheck
+from ..filter.valgrindCallgrind import ValgrindCallgrind
 from ..filter.runUnitTest import RunUnittest
 from ..filter.runPerformanceTest import RunPerformancetest
 from ..filter.perf import Perf
@@ -14,6 +15,9 @@ def run(target, mode, runTarget, compiler, profileMethod, valgrind, showStuff):
 
     if profileMethod == 'perf':
         filterchain.addFilter(Perf(getBuildDir(mode, compiler), showStuff))
+
+    if profileMethod == 'callgrind':
+        filterchain.addFilter(ValgrindCallgrind(getBuildDir(mode, compiler), showStuff))
 
     if runTarget == 'unittest':
         filterchain.addFilter(RunUnittest(target, mode, compiler))

@@ -60,7 +60,7 @@ def main():
     runTargetOptions = ['unittest', 'performance', 'all']
     compilerOptions = ['gcc', 'clang']
     analyzeOptions = ['clang', 'cppcheck', 'cpplint', 'simian', 'cpd']
-    profileOptions = ['none', 'perf']
+    profileOptions = ['none', 'perf', 'callgrind']
 
     parser = argparse.ArgumentParser(description='Convenience script for executing commands')
     parser.add_argument('commands', metavar='commands', nargs='+', choices=commandOptions,
