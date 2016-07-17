@@ -101,5 +101,5 @@ def analyzeBuildSystem(method, mode, target, verbose):
     elif method == 'cpd':
         return analyzeCpd(target, verbose)
     else:
-        print('Error: unknown method to analyze project.')
+        print('Error: unknown method to analyze project: ' + method)
         return False

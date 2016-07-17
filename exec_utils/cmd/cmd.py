@@ -5,22 +5,45 @@ from ..vcsSystem.vcsSystem import *
 from ..buildSystem.buildSystem import *
 from ..runner.runner import *
 from ..analyze.analyze import *
+from exec_utils.options.options import Options
 
-def init(workingDir, mode):
-    return initVcs() and initBuildSystem(workingDir, mode)
+def init(workingDir, options):
+    return initVcs() and initBuildSystem(workingDir, options.getModes())
 
-def build(target, mode, runMode, compiler, toolchainPath, verbose, singleThreaded):
-    return buildBuildSystem(target, mode, runMode, compiler, toolchainPath, verbose, singleThreaded)
+def build(options):
+    for target in options.getTargets():
+        for runMode in options.getRunTargets():
+            for compiler in options.getCompilers():
+                if not buildBuildSystem(target, options.getModes(), runMode, compiler, options.getToolchainPath(), options.getVerbosity(), options.getBuildSingleThreaded()):
+                    return False
+    return True
 
-def clean(target, mode, compiler, verbose):
-    return cleanBuildSystem(target, mode, compiler, verbose)
+def clean(options):
+    for target in options.getTargets():
+        for compiler in options.getCompilers():
+            if not cleanBuildSystem(target, options.getModes(), compiler, options.getVerbosity()):
+                return False
+    return True
 
-def distclean(mode, compiler):
-    return distcleanBuildSystem(mode, compiler)
+def distclean(options):
     # TODO: Use python to clean python files
+    for compiler in options.getCompilers():
+        if not distcleanBuildSystem(options.getModes(), compiler):
+            return False
+    return True
 
-def run(target, mode, runTargets, compiler, profileMethod, valgrind, showStuff):
-    return runner(target, mode, runTargets, compiler, profileMethod, valgrind, showStuff)
+def run(options):
+    for target in options.getTargets():
+        for runTarget in options.getRunTargets():
+            for compiler in options.getCompilers():
+                for profileMethod in options.getProfileMethods():
+                    if not runner(target, options.getModes(), runTarget, compiler, profileMethod, options.getValgrindMemcheck(), options.getShowStuff()):
+                        return False
+    return True
 
-def analyze(method, mode, targets, verbose):
-    return analyzeBuildSystem(method, mode, targets, verbose)
+def analyze(options):
+    for analyzeMethod in options.getAnalyzeMethods():
+        for target in options.getTargets():
+            if not analyzeBuildSystem(analyzeMethod, options.getModes(), target, options.getVerbosity()):
+                return False
+    return True

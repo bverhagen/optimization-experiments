@@ -38,7 +38,13 @@ def getBuildDir(mode, compiler):
 def getBinDir(mode):
     return BIN_DIR + '/' + mode
 
-def getAllRealTargets(dir):
+def getAllTargets(dir):
+    targets = []
+    targets.extend(getAllRealTargets(dir))
+    targets.extend(getAllPhonyTargets())
+    return targets
+
+def getTargets(dir, returnAll = True):
     targets = getAllDirs('{rootDir}/src'.format(rootDir=dir))
     if targets.count('catch'):
         targets.remove('catch')
@@ -46,21 +52,29 @@ def getAllRealTargets(dir):
         targets.remove('benchmark')
     if targets.count('common'):
         targets.remove('common')
-    return targets
 
-def getAllPhonyTargets():
-    return ['all']
-
-def getAllTargets(dir):
-    targets = []
-    targets.extend(getAllRealTargets(dir))
-    targets.extend(getAllPhonyTargets())
+    if returnAll:
+        targets.append('all')
     return targets
 
 def getSrcDir(target = None):
     if target is None or target == 'all':
         return SRC_DIR
     return SRC_DIR + '/' + target
+
+def getRunTargets(returnAll = True):
+    runTargets = ['unittest', 'performance']
+    if returnAll:
+        runTargets.append('all')
+    return runTargets
+
+def getAnalyzeMethods(returnAll = True):
+    analyzeMethods = ['clang', 'cppcheck', 'cpd']
+    if returnAll:
+        analyzeMethods.append('all')
+        analyzeMethods.append('simian')     # Not officially supported
+        analyzeMethods.append('cpplint')    # Not officially supported
+    return analyzeMethods
 
 def executeInShell(cmd, working_directory = '.'):
     pwd()

@@ -11,9 +11,10 @@ class Options:
         self.showStuff = False
         self.verbosity = False
         self.buildSingleThreaded = False
-        self.analyzeMethods = ['clang']
+        self.analyzeMethods = ['all']
         self.profileMethods = ['none']
         self.toolchainPath = ['']
+        self.currentDir = getCurrentDir()
         pass 
 
     def parse(self, args):
@@ -49,10 +50,11 @@ class Options:
         return self.modes
 
     def getTargets(self):
-        self.replaceWith(self.targets, 'all', getAllRealTargets(getCurrentDir())) 
+        self.replaceWith(self.targets, 'all', getTargets(self.currentDir, False)) 
         return self.targets
 
     def getRunTargets(self):
+        self.replaceWith(self.runTargets, 'all', getRunTargets(False)) 
         return self.runTargets
 
     def getCompilers(self):
@@ -64,10 +66,11 @@ class Options:
     def getVerbosity(self):
         return self.verbosity
 
-    def buildSingleThreaded(self):
+    def getBuildSingleThreaded(self):
         return self.buildSingleThreaded
 
     def getAnalyzeMethods(self):
+        self.replaceWith(self.analyzeMethods, 'all', getAnalyzeMethods(False)) 
         return self.analyzeMethods
 
     def getToolchainPath(self):
@@ -76,5 +79,8 @@ class Options:
     def getProfileMethods(self):
         return self.profileMethods
 
-    def showStuff(self):
+    def getShowStuff(self):
         return self.showStuff
+
+    def getCurrentDir(self):
+        return self.currentDir

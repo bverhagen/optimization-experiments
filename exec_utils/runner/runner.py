@@ -28,27 +28,5 @@ def run(target, mode, runTarget, compiler, profileMethod, valgrind, showStuff):
         return False
     return filterchain.execute()
 
-def runner(targets, mode, runTargets, compiler, profileMethod, valgrind, showStuff):
-    for target in targets:
-        if target == 'all':
-            for target in getAllRealTargets(getCurrentDir()):
-                for runTarget in runTargets:
-                    if runTarget == 'all':
-                        if not run(target, mode, 'unittest', compiler, profileMethod, valgrind, showStuff):
-                            return False
-                        if not run(target, mode, 'performance', compiler, profileMethod, valgrind, showStuff):
-                            return False
-                    else:
-                        if not run(target, mode, runTarget, compiler, profileMethod, valgrind, showStuff):
-                            return False
-        else:
-            for runTarget in runTargets:
-                if runTarget == 'all':
-                    if not run(target, mode, 'unittest', compiler, profileMethod, valgrind, showStuff):
-                        return False
-                    if not run(target, mode, 'performance', compiler, profileMethod, valgrind, showStuff):
-                        return False
-                else:
-                    if not run(target, mode, runTarget, compiler, profileMethod, valgrind, showStuff):
-                        return False
-    return True
+def runner(target, mode, runTarget, compiler, profileMethod, valgrind, showStuff):
+    return run(target, mode, runTarget, compiler, profileMethod, valgrind, showStuff)

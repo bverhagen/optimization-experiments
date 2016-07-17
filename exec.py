@@ -13,36 +13,25 @@ EXIT_ERROR = 1
 def execute(options):
     for command in options.getCommands():
         if(command == 'init'):
-            if not init(getCurrentDir(), options.getModes()):
+            if not init(options.getCurrentDir(), options):
                 return False
         elif(command == 'build'):
-            for target in options.getTargets():
-                for runMode in options.getRunTargets():
-                    for compiler in options.getCompilers():
-                        if not build(target, options.getModes(), runMode, compiler, options.getToolchainPath(), options.getVerbosity(), options.buildSingleThreaded()):
-                            print("Build failed")
-                            return False
+            if not build(options):
+                print("Build failed")
+                return False
         elif(command == 'clean'):
-            for target in options.getTargets():
-                for compiler in options.getCompilers():
-                    if not clean(target, options.getModes(), compiler, options.getVerbosity()):
-                        print("Clean failed")
-                        return False
+            if not clean(options):
+                print("Clean failed")
+                return False
         elif(command == 'distclean'):
-            for compiler in options.getCompilers():
-                if not distclean(options.getModes(), compiler):
+                if not distclean(options):
                     return False
         elif(command == 'run'):
-            for compiler in options.getCompilers():
-                for profileMethod in options.getProfileMethods():
-                    if not run(targets, options.getModes(), options.getRunTargets(), compiler, profileMethod, options.getValgrindMemcheck(), options.showStuff()):
-                        return False
+            if not run(options):
+                return False
         elif(command == 'analyze'):
-            for analyzeMethod in options.getAnalyzeMethods():
-                for target in options.getTargets():
-                    if not analyze(analyzeMethod, options.getModes(), target, options.getVerbosity()):
-                        return False
-
+            if not analyze(options):
+                return False
         else:
             print("Error: invalid command")
             return False
@@ -51,15 +40,15 @@ def execute(options):
 
 
 def main():
+    args = Options()        # Until Options.parse() is called, the getters will return the default values
+
     commandOptions = ['init', 'build', 'clean', 'distclean', 'rebuild', 'run', 'analyze']
     buildModeOptions = ['debug', 'release']
-    targetOptions = getAllTargets(getCurrentDir())
-    runTargetOptions = ['unittest', 'performance', 'all']
+    targetOptions = getTargets(args.getCurrentDir())
+    runTargetOptions = getRunTargets()
     compilerOptions = ['gcc', 'clang']
-    analyzeOptions = ['clang', 'cppcheck', 'cpplint', 'simian', 'cpd']
+    analyzeOptions = getAnalyzeMethods()
     profileOptions = ['none', 'perf', 'callgrind']
-
-    args = Options()        # Until Options.parse() is called, the getters will return the default values
 
     parser = argparse.ArgumentParser(description='Convenience script for executing commands')
     parser.add_argument('commands', metavar='commands', nargs='+', choices=commandOptions,
