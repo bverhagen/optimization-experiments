@@ -11,7 +11,7 @@ class Options:
         self.verbosity = False
         self.buildSingleThreaded = False
         self.analyzeMethods = ['all']
-        self.profileMethods = ['none']
+        self.profileMethods = ['perf']
         self.toolchainPath = ['']
         self.currentDir = getCurrentDir()
         pass 

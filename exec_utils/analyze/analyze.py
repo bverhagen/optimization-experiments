@@ -108,7 +108,9 @@ def analyzeBuildSystem(method, mode, target, verbose, showStuff, options):
             for runTarget in options.getRunTargets():
                 filterchain = FilterChain()
                 filterchain.addFilter(ValgrindMemcheck())
-                runner(target, mode, runTarget, compiler, None, showStuff, filterchain)
+                if not runner(target, mode, runTarget, compiler, showStuff, filterchain):
+                    return False
+        return True
     else:
         print('Error: unknown method to analyze project: ' + method)
-        return False
+    return False

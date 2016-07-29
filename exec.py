@@ -32,6 +32,9 @@ def execute(options):
         elif(command == 'analyze'):
             if not analyze(options):
                 return False
+        elif(command == 'profile'):
+            if not profile(options):
+                return False
         else:
             print("Error: invalid command")
             return False
@@ -42,13 +45,13 @@ def execute(options):
 def main():
     args = Options()        # Until Options.parse() is called, the getters will return the default values
 
-    commandOptions = ['init', 'build', 'clean', 'distclean', 'rebuild', 'run', 'analyze']
+    commandOptions = ['init', 'build', 'clean', 'distclean', 'rebuild', 'run', 'analyze', 'profile']
     buildModeOptions = ['debug', 'release']
     targetOptions = getTargets(args.getCurrentDir())
     runTargetOptions = getRunTargets()
     compilerOptions = ['gcc', 'clang']
     analyzeOptions = getAnalyzeMethods()
-    profileOptions = ['none', 'perf', 'callgrind']
+    profileOptions = ['perf', 'callgrind']
 
     parser = argparse.ArgumentParser(description='Convenience script for executing commands')
     parser.add_argument('commands', metavar='commands', nargs='+', choices=commandOptions,

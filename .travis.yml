@@ -33,14 +33,14 @@ env:
     - EXEC="init build --target all --compiler clang --toolchain-path ${PWD}/clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04/bin"
     - EXEC='init build run --compiler gcc --run unittest --target all'
     - EXEC="init build run --compiler clang --run unittest --target all --toolchain-path ${PWD}/clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04/bin"
-    - EXEC='init build run --compiler gcc --valgrind --run unittest --target all'
-    - EXEC="init build run --compiler clang --valgrind --run unittest --target all --toolchain-path ${PWD}/clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04/bin"
+    - EXEC='init build analyze --analyze-method valgrind --compiler gcc --run unittest --target all'
+    - EXEC="init build analyze --analyze-method valgrind --compiler clang --run unittest --target all --toolchain-path ${PWD}/clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04/bin"
     - EXEC='init build run --compiler gcc --run performance --target all'
     - EXEC="init build run --compiler clang --run performance --target all --toolchain-path ${PWD}/clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04/bin"
     - EXEC='analyze -a cppcheck'
     - EXEC='init analyze -a clang'
     - EXEC='analyze -a cpd'
-    - EXEC='init build run --compiler gcc --run performance --target all --profile-method perf'
+    - EXEC='init build profile --compiler gcc --run performance --target all --profile-method perf'
 
 script: 
     - PWD=$(pwd) ./exec $EXEC

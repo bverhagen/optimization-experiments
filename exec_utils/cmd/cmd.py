@@ -5,6 +5,7 @@ from ..vcsSystem.vcsSystem import *
 from ..buildSystem.buildSystem import *
 from ..runner.runner import *
 from ..analyze.analyze import *
+from ..profile.profile import *
 from exec_utils.options.options import Options
 
 def init(workingDir, options):
@@ -36,9 +37,8 @@ def run(options):
     for target in options.getTargets():
         for runTarget in options.getRunTargets():
             for compiler in options.getCompilers():
-                for profileMethod in options.getProfileMethods():
-                    if not runner(target, options.getModes(), runTarget, compiler, profileMethod, options.getShowStuff()):
-                        return False
+                if not runner(target, options.getModes(), runTarget, compiler, options.getShowStuff()):
+                    return False
     return True
 
 def analyze(options):
@@ -47,3 +47,13 @@ def analyze(options):
             if not analyzeBuildSystem(analyzeMethod, options.getModes(), target, options.getVerbosity(), options.getShowStuff(), options):
                 return False
     return True
+
+def profile(options):
+    for profileMethod in options.getProfileMethods():
+        for target in options.getTargets():
+            for runTarget in options.getRunTargets():
+                for compiler in options.getCompilers():
+                    if not profileSystem(target, options.getModes(), runTarget, compiler, profileMethod, options.getShowStuff(), options):
+                        return False
+    return True
+
