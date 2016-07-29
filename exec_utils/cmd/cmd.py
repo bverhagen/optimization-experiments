@@ -37,13 +37,13 @@ def run(options):
         for runTarget in options.getRunTargets():
             for compiler in options.getCompilers():
                 for profileMethod in options.getProfileMethods():
-                    if not runner(target, options.getModes(), runTarget, compiler, profileMethod, options.getValgrindMemcheck(), options.getShowStuff()):
+                    if not runner(target, options.getModes(), runTarget, compiler, profileMethod, options.getShowStuff()):
                         return False
     return True
 
 def analyze(options):
     for analyzeMethod in options.getAnalyzeMethods():
         for target in options.getTargets():
-            if not analyzeBuildSystem(analyzeMethod, options.getModes(), target, options.getVerbosity()):
+            if not analyzeBuildSystem(analyzeMethod, options.getModes(), target, options.getVerbosity(), options.getShowStuff(), options):
                 return False
     return True

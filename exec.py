@@ -61,7 +61,6 @@ def main():
 		   help="Modes of the target to run.")
     parser.add_argument('-c', '--compiler', nargs='+', choices=compilerOptions, default=args.getCompilers(),
 		   help="Compiler to use.")
-    parser.add_argument('-w', '--valgrind', action='store_true', help="Enable valgrind memcheck. Only applicable on the run command")
     parser.add_argument('-b', '--show-stuff', action='store_true', help="Enable this to automatically open or show the results")
     parser.add_argument('-v', '--verbose-make', action='store_true', help="Enable make in verbose mode")
     parser.add_argument('-s', '--build-single-threaded', action='store_true', help="Build in single threaded mode")

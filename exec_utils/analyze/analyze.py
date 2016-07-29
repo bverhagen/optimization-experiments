@@ -2,6 +2,9 @@
 
 from ..util.util import *
 from ..buildSystem.buildSystem import *
+from ..runner.runner import runner
+from ..filter.filterchain import FilterChain
+from ..filter.valgrindMemcheck import ValgrindMemcheck
 
 def analyzeClang(mode, target, verbose):
     return buildBuildSystem(target, mode, 'target', 'CC', '', verbose, False, prependCommand = ['scan-build', '-o', 'build/clang-static-analyze'])
@@ -89,7 +92,7 @@ def analyzeCpd(target, verbose):
     cmd.append(' '.join(includes))
     return isSuccess(executeInShell(cmd))
 
-def analyzeBuildSystem(method, mode, target, verbose):
+def analyzeBuildSystem(method, mode, target, verbose, showStuff, options):
     if method == 'clang':
         return analyzeClang(mode, target, verbose)
     elif method == 'cppcheck':
@@ -100,6 +103,12 @@ def analyzeBuildSystem(method, mode, target, verbose):
         return analyzeSimian(target, verbose)
     elif method == 'cpd':
         return analyzeCpd(target, verbose)
+    elif method == 'valgrind':
+        for compiler in options.getCompilers():
+            for runTarget in options.getRunTargets():
+                filterchain = FilterChain()
+                filterchain.addFilter(ValgrindMemcheck())
+                runner(target, mode, runTarget, compiler, None, showStuff, filterchain)
     else:
         print('Error: unknown method to analyze project: ' + method)
         return False

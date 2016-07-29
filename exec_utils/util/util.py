@@ -69,7 +69,7 @@ def getRunTargets(returnAll = True):
     return runTargets
 
 def getAnalyzeMethods(returnAll = True):
-    analyzeMethods = ['clang', 'cppcheck', 'cpd']
+    analyzeMethods = ['clang', 'cppcheck', 'cpd', 'valgrind']
     if returnAll:
         analyzeMethods.append('all')
         analyzeMethods.append('simian')     # Not officially supported

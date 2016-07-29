@@ -7,7 +7,6 @@ class Options:
         self.targets= ['all']
         self.runTargets= ['all']
         self.compilers = ['gcc']
-        self.valgrindMemcheck = False       # TODO convert this to an analysis parameter
         self.showStuff = False
         self.verbosity = False
         self.buildSingleThreaded = False
@@ -24,7 +23,6 @@ class Options:
         self.targets = args.target
         self.runTargets = args.run
         self.compilers = args.compiler
-        self.valgrindMemcheck = args.valgrind
         self.verbosity = args.verbose_make
         self.buildSingleThreaded = args.build_single_threaded
         self.analyzeMethods = args.analyze_method
@@ -59,9 +57,6 @@ class Options:
 
     def getCompilers(self):
         return self.compilers
-
-    def getValgrindMemcheck(self):
-        return self.valgrindMemcheck
 
     def getVerbosity(self):
         return self.verbosity
