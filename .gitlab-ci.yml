@@ -46,14 +46,16 @@ pmd-cpd:
 
 python2-compatibility:
     script:
-        - apt-get install --yes -qq valgrind cppcheck unzip default-jre
+        - apt-get install --yes -qq valgrind cppcheck unzip default-jre unzip flex bison
+        - wget https://github.com/torvalds/linux/archive/master.zip && unzip master.zip && pushd linux-master/tools/perf && make && export PATH=$PATH:$(pwd); popd
         - "python2 exec.py distclean clean init build run rebuild analyze profile -m release -t all -r all -c gcc clang -a clang cppcheck -l perf callgrind"
         - "python2 exec.py build analyze --run unittest --analyze-method valgrind"
     stage: test
 
 python3-compatibility:
     script:
-        - apt-get install --yes -qq valgrind cppcheck unzip default-jre python3
+        - apt-get install --yes -qq valgrind cppcheck unzip default-jre python3 unzip flex bison
+        - wget https://github.com/torvalds/linux/archive/master.zip && unzip master.zip && pushd linux-master/tools/perf && make && export PATH=$PATH:$(pwd); popd
         - "python3 exec.py distclean clean init build run rebuild analyze profile -m release -t all -r all -c gcc clang -a clang cppcheck -l perf callgrind"
         - "python3 exec.py build analyze --run unittest --analyze-method valgrind"
     stage: test
