@@ -2,7 +2,6 @@
 #define __PERFORMANCEUTILS_H__
 
 #include <cstdint>
-#include "benchmark/benchmark.h"
 
 namespace performanceUtils
 {
@@ -11,7 +10,11 @@ namespace performanceUtils
 
     template<typename T> 
     inline void doNotOptimize(T& var) noexcept {
-        benchmark::DoNotOptimize(var);
+#if defined(__GNUC__)
+        asm volatile("" : : "g"(var) : "memory");
+#else
+	    forceUseOfVariableVoid(static_cast<void*>(var));        // static_cast is safe, since forceUseOfVariable will not do anything with it anyway.
+#endif
     }
 
     // Override for arrays: does not compile with the above.

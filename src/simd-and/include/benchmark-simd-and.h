@@ -22,7 +22,7 @@ namespace SimdAnd {
 
                 template<simdAndCallBack F>
                 static void run(benchmark::State& state) {
-                    const size_t nbOfElements = state.range_x() * sizeof(uint8_t) / sizeof(T);
+                    const size_t nbOfElements = state.range(0) * sizeof(uint8_t) / sizeof(T);
                     T input1[nbOfElements];
                     T input2[nbOfElements];
                     Common::randomInput(nbOfElements, input1, input2);
