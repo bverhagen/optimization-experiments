@@ -76,3 +76,12 @@ class Gcc:
     @staticmethod
     def stopAtAssembler(env):
         env['CPPFLAGS'].extend(['-S', '-fverbose-asm', '-Wa,-adhln'])
+
+    @staticmethod
+    def enableDiagnostics(env):
+        pass    # TODO
+
+    @staticmethod
+    def noIgnoredAttribute(env):
+        env['CPPFLAGS'].append('-Wno-ignored-attributes')
+

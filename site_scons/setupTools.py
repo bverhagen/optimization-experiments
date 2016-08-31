@@ -76,6 +76,12 @@ def stopAtAssembler(env):
 def enableSse2(env):
     env['SETUPCONFIG_TOOLCHAIN'].enableSse2(env)
 
+def enableDiagnostics(env):
+    env['SETUPCONFIG_TOOLCHAIN'].enableDiagnostics(env)
+
+def noIgnoredAttribute(env):
+    env['SETUPCONFIG_TOOLCHAIN'].noIgnoredAttribute(env)
+
 class Submodule:
     def __init__(self, name, commitHash):
         self.name = name

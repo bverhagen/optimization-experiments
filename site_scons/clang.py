@@ -21,6 +21,11 @@ class Clang(gcc.Gcc):
     def stopAtAssembler(env):
         env['CPPFLAGS'].extend(['-S', '-fverbose-asm'])
 
+    @staticmethod
+    def enableDiagnostics(env):
+#        env['CPPFLAGS'].extend(['-Rpass-analysis=loop-vectorize'])
+        pass
+
 class ClangStaticAnalyzer(Clang):
     def __init__(self, env):
         self.setupToolChain(env)

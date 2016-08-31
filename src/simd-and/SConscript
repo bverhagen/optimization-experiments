@@ -2,6 +2,7 @@ Import('env')
 
 import copy
 import buildTools
+import setupTools
 
 includes = [
     'include',
@@ -16,11 +17,14 @@ libs_path = [
     env['THIRD_PARTY_LIBS_DIR'],
 ]
 
+env_simd_and = env.Clone()
+setupTools.noIgnoredAttribute(env_simd_and)
+
 sources = ['src/unittest.cpp']
-unittest = buildTools.createUnittest(env, 'simd-and-unittest', sources, includes, libs, libs_path)
+unittest = buildTools.createUnittest(env_simd_and, 'simd-and-unittest', sources, includes, libs, libs_path)
 bin = env.Alias("simd-and", unittest)
 
 sources = Glob('src/benchmark-*.cpp')
-benchmarks = buildTools.createBenchmark(env, 'simd-and-benchmark', sources, includes, libs, libs_path, TEMPS=['.s'])
+benchmarks = buildTools.createBenchmark(env_simd_and, 'simd-and-benchmark', sources, includes, libs, libs_path, TEMPS=['.s'])
 for target in benchmarks:
     env.Alias("simd-and", target)
