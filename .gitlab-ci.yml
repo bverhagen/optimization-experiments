@@ -1,6 +1,6 @@
 before_script:
     - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
-    - apt-get update -qq && apt-get install --yes -qq cmake scons gcc clang
+    - apt-get update -qq && apt-get install --yes -qq cmake scons gcc g++ clang
 
 stages:
     - build
@@ -13,36 +13,47 @@ build-all:
     stage: build
 
 unittest:
-    script: "./exec init build run --target all --run unittest --compiler gcc clang"
+    script: 
+        - git submodule update --init 3rdparty/exec-helper
+        - "./exec init build run --target all --run unittest --compiler gcc clang"
     stage: test
 
 run-benchmarks-gcc:
-    script: "./exec init build run --target all --run performance --compiler gcc"
+    script:
+        - git submodule update --init 3rdparty/exec-helper
+        - "./exec init build run --target all --run performance --compiler gcc"
     stage: test
 
 run-benchmarks-clang:
-    script: "./exec init build run --target all --run performance --compiler clang"
+    script: 
+        - git submodule update --init 3rdparty/exec-helper
+        - "./exec init build run --target all --run performance --compiler clang"
     stage: test
 
 valgrind:
     script: 
         - apt-get install --yes -qq valgrind
+        - git submodule update --init 3rdparty/exec-helper
         - "./exec init build analyze --target all --run unittest --analyze-method valgrind --compiler gcc clang"
     stage: test
 
 cppcheck:
     script: 
         - apt-get install --yes -qq cppcheck unzip
+        - git submodule update --init 3rdparty/exec-helper
         - "./exec analyze -a cppcheck"
     stage: test
 
 clang-static-analyzer:
-    script: "./exec init analyze -a clang"
+    script: 
+        - git submodule update --init 3rdparty/exec-helper
+        - "./exec init analyze -a clang"
     stage: test
 
 pmd-cpd:
     script: 
         - apt-get install --yes -qq default-jre unzip
+        - git submodule update --init 3rdparty/exec-helper
         - "./exec analyze -a cpd"
     stage: test
 
@@ -50,5 +61,6 @@ perf-profiling:
     script:
         - apt-get install --yes -qq unzip flex bison
         - wget https://github.com/torvalds/linux/archive/master.zip && unzip master.zip && pushd linux-master/tools/perf && make && export PATH=$PATH:$(pwd); popd
+        - git submodule update --init 3rdparty/exec-helper
         - ./exec init build profile --profile-method perf -r performance
     stage: test
