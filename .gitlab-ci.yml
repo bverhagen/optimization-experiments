@@ -8,7 +8,7 @@ stages:
 
 build-all:
     script: 
-        - git submodule update --init 3rdparty/exec-helper
+        - git submodule update
         - "./exec init build --target all --compiler gcc clang"
     stage: build
 
