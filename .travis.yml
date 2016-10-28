@@ -43,6 +43,7 @@ env:
     - EXEC='init build profile --compiler gcc --run performance --target all --profile-method perf'
 
 script: 
+    - git submodule update 3rdparty/exec-helper
     - PWD=$(pwd) ./exec $EXEC
 
 ## Hacks to make Travis handle git submodules properly
