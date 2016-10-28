@@ -21,7 +21,7 @@ addons:
             - valgrind
             - wget
             - default-jre
-            - linux-tools-4.4.0-34-generic
+            - linux-tools-4.4.0-42-generic
             - linux-tools-generic-lts-trusty
 
 language: c++
