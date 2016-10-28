@@ -1,1 +1,1 @@
-./exec.py $*
+3rdparty/exec-helper/exec.py

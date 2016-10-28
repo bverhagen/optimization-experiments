@@ -4,3 +4,6 @@
 [submodule "3rdparty/Catch"]
 	path = 3rdparty/Catch
 	url = git@github.com:philsquared/Catch.git
+[submodule "3rdparty/exec-helper"]
+	path = 3rdparty/exec-helper
+	url = https://github.com/bverhagen/exec-helper.git

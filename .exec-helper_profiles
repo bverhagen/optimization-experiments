@@ -1,0 +1,17 @@
+{
+    "profileMap" : [
+        {   "id" : "unittest",
+            "suffix" : "-unittest",
+            "targetDirectory" : "bin/test/unittest"
+        },
+        {   "id" : "performance",
+            "suffix" : "-benchmark",
+            "targetDirectory" : "bin/benchmark"
+        }
+
+    ],
+    "targets" : ["simd-and"],
+    "build-system" : "scons",
+    "root-build-dir" : "build/{COMPILER}/{MODE}",
+    "compilers" : ["gcc", "clang"]
+}

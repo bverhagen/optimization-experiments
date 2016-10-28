@@ -7,62 +7,62 @@ stages:
     - test
 
 build-all:
-    script: "./exec.py init build --target all --compiler gcc clang"
+    script: "./exec init build --target all --compiler gcc clang"
     stage: build
 
 unittest:
-    script: "./exec.py init build run --target all --run unittest --compiler gcc clang"
+    script: "./exec init build run --target all --run unittest --compiler gcc clang"
     stage: test
 
 run-benchmarks-gcc:
-    script: "./exec.py init build run --target all --run performance --compiler gcc"
+    script: "./exec init build run --target all --run performance --compiler gcc"
     stage: test
 
 run-benchmarks-clang:
-    script: "./exec.py init build run --target all --run performance --compiler clang"
+    script: "./exec init build run --target all --run performance --compiler clang"
     stage: test
 
 valgrind:
     script: 
         - apt-get install --yes -qq valgrind
-        - "./exec.py init build analyze --target all --run unittest --analyze-method valgrind --compiler gcc clang"
+        - "./exec init build analyze --target all --run unittest --analyze-method valgrind --compiler gcc clang"
     stage: test
 
 cppcheck:
     script: 
         - apt-get install --yes -qq cppcheck unzip
-        - "./exec.py analyze -a cppcheck"
+        - "./exec analyze -a cppcheck"
     stage: test
 
 clang-static-analyzer:
-    script: "./exec.py init analyze -a clang"
+    script: "./exec init analyze -a clang"
     stage: test
 
 pmd-cpd:
     script: 
         - apt-get install --yes -qq default-jre unzip
-        - "./exec.py analyze -a cpd"
+        - "./exec analyze -a cpd"
     stage: test
 
 python2-compatibility:
     script:
         - apt-get install --yes -qq valgrind cppcheck unzip default-jre unzip flex bison
         - wget https://github.com/torvalds/linux/archive/master.zip && unzip master.zip && pushd linux-master/tools/perf && make && export PATH=$PATH:$(pwd); popd
-        - "python2 exec.py distclean clean init build run rebuild analyze profile -m release -t all -r all -c gcc clang -a clang cppcheck -l perf callgrind"
-        - "python2 exec.py build analyze --run unittest --analyze-method valgrind"
+        - "python2 exec distclean clean init build run rebuild analyze profile -m release -t all -r all -c gcc clang -a clang cppcheck -l perf callgrind"
+        - "python2 exec build analyze --run unittest --analyze-method valgrind"
     stage: test
 
 python3-compatibility:
     script:
         - apt-get install --yes -qq valgrind cppcheck unzip default-jre python3 unzip flex bison
         - wget https://github.com/torvalds/linux/archive/master.zip && unzip master.zip && pushd linux-master/tools/perf && make && export PATH=$PATH:$(pwd); popd
-        - "python3 exec.py distclean clean init build run rebuild analyze profile -m release -t all -r all -c gcc clang -a clang cppcheck -l perf callgrind"
-        - "python3 exec.py build analyze --run unittest --analyze-method valgrind"
+        - "python3 exec distclean clean init build run rebuild analyze profile -m release -t all -r all -c gcc clang -a clang cppcheck -l perf callgrind"
+        - "python3 exec build analyze --run unittest --analyze-method valgrind"
     stage: test
 
 perf-profiling:
     script:
         - apt-get install --yes -qq unzip flex bison
         - wget https://github.com/torvalds/linux/archive/master.zip && unzip master.zip && pushd linux-master/tools/perf && make && export PATH=$PATH:$(pwd); popd
-        - ./exec.py init build profile --profile-method perf -r performance
+        - ./exec init build profile --profile-method perf -r performance
     stage: test
