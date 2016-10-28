@@ -71,7 +71,6 @@ env['CPPPATH'].append('{thirdpartyBuildDir}'.format(thirdpartyBuildDir=env['THIR
 # Add thirdparties to include path
 env['CPPPATH'].append('{thirdPartyDir}/{catchIncludeDir}'.format(thirdPartyDir = env['THIRD_PARTY_DIR'], catchIncludeDir = "Catch/include"))
 env['CPPPATH'].append('{thirdPartyDir}/{benchmarkIncludeDir}'.format(thirdPartyDir = env['THIRD_PARTY_DIR'], benchmarkIncludeDir = "benchmark/include"))
-env['CPPPATH'].append('{thirdPartyDir}/{benchmarkIncludeDir}'.format(thirdPartyDir = env['THIRD_PARTY_DIR'], benchmarkIncludeDir = "benchmark/include/benchmark"))
 
 # Fix for 3rd party modules that actually want to be installed in the system dirs
 env['CXXFLAGS'].append(['-isystem{thirdpartyBuildDir}'.format(thirdpartyBuildDir=env['THIRD_PARTY_INCLUDE_DIR'])])
