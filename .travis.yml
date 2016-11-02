@@ -7,7 +7,7 @@ before_install:
 
 install:
     # Install a more recent clang version
-    - export CLANG_VERSION=3.9.0 && wget "http://llvm.org/releases/${CLANG_VERSION}/clang+llvm-${CLANG_VERSION}-x86_64-linux-gnu-ubuntu-14.04.tar.xz -O clang.tar.gz" && tar -xvf 'clang.tar.xz' && mv clang+* clang && export PATH=$(pwd)/clang/bin:$PATH
+    - export CLANG_VERSION=3.9.0 && wget "http://llvm.org/releases/${CLANG_VERSION}/clang+llvm-${CLANG_VERSION}-x86_64-linux-gnu-ubuntu-14.04.tar.xz" -O clang.tar.xz && tar -xvf 'clang.tar.xz' && mv clang+* clang && export PATH=$(pwd)/clang/bin:$PATH
     # Install latest cppcheck
     - wget https://github.com/danmar/cppcheck/archive/master.zip && unzip master.zip && make -C cppcheck-master -j SRCDIR=build CFGDIR=$(pwd)/cppcheck-master/cfg HAVE_RULES=yes CXXFLAGS="-O2 -DNDEBUG -Wall -Wno-sign-compare -Wno-unused-function" && export PATH=$(pwd)/cppcheck-master:$PATH
     - sudo sh -c 'echo 1 >/proc/sys/kernel/perf_event_paranoid'
