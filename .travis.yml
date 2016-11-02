@@ -6,8 +6,8 @@ before_install:
     - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
 
 install:
-    # Install more recent clang
-    - wget 'llvm.org/releases/3.8.0/clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04.tar.xz' && tar -xf 'clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04.tar.xz' && export PATH=$(pwd)/clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04/bin:$PATH
+    # Install a more recent clang version
+    - export CLANG_VERSION=3.9.0 && wget "http://llvm.org/releases/${CLANG_VERSION}/clang+llvm-${CLANG_VERSION}-x86_64-linux-gnu-ubuntu-14.04.tar.xz -O clang.tar.gz" && tar -xvf 'clang.tar.xz' && mv clang+* clang && export PATH=$(pwd)/clang/bin:$PATH
     # Install latest cppcheck
     - wget https://github.com/danmar/cppcheck/archive/master.zip && unzip master.zip && make -C cppcheck-master -j SRCDIR=build CFGDIR=$(pwd)/cppcheck-master/cfg HAVE_RULES=yes CXXFLAGS="-O2 -DNDEBUG -Wall -Wno-sign-compare -Wno-unused-function" && export PATH=$(pwd)/cppcheck-master:$PATH
     - sudo sh -c 'echo 1 >/proc/sys/kernel/perf_event_paranoid'
@@ -30,15 +30,15 @@ compiler: gcc
 
 env:
     - EXEC='init build --target all --compiler gcc'
-    - EXEC="init build --target all --compiler clang --toolchain-path ${PWD}/clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04/bin"
+    - EXEC="init build --target all --compiler clang --toolchain-path ${PWD}/clang/bin"
     - EXEC='init build run --compiler gcc --run unittest --target all'
-    - EXEC="init build run --compiler clang --run unittest --target all --toolchain-path ${PWD}/clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04/bin"
+    - EXEC="init build run --compiler clang --run unittest --target all --toolchain-path ${PWD}/clang/bin"
     - EXEC='init build analyze --analyze-method valgrind --compiler gcc --run unittest --target all'
-    - EXEC="init build analyze --analyze-method valgrind --compiler clang --run unittest --target all --toolchain-path ${PWD}/clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04/bin"
+    - EXEC="init build analyze --analyze-method valgrind --compiler clang --run unittest --target all --toolchain-path ${PWD}/clang/bin"
     - EXEC='init build run --compiler gcc --run performance --target all'
-    - EXEC="init build run --compiler clang --run performance --target all --toolchain-path ${PWD}/clang+llvm-3.8.0-x86_64-linux-gnu-ubuntu-14.04/bin"
+    - EXEC="init build run --compiler clang --run performance --target all --toolchain-path ${PWD}/clang/bin"
     - EXEC='analyze -a cppcheck'
-    - EXEC='init analyze -a clang'
+    - EXEC='init analyze -a clang --toolchain-path ${PWD}/clang/bin'
     - EXEC='analyze -a cpd'
     - EXEC='init build profile --compiler gcc --run performance --target all --profile-method perf'
 
