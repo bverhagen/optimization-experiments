@@ -39,7 +39,7 @@ env:
     - EXEC="init build run --compiler clang --run performance --target all --toolchain-path ${PWD}/clang/bin"
     - EXEC='analyze -a cppcheck'
     - EXEC='init analyze -a clang --compiler gcc'
-    - EXEC='init analyze -a clang --compiler clang --toolchain-path ${PWD}/clang/bin'
+    - EXEC="init analyze -a clang --compiler clang --toolchain-path ${PWD}/clang/bin"
     - EXEC='analyze -a cpd'
     - EXEC='init build profile --compiler gcc --run performance --target all --profile-method perf'
 
