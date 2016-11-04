@@ -4,7 +4,7 @@ Optimization Experiments
 A play ground for my optimization efforts.
 
 Travis: [![Build Status](https://travis-ci.org/bverhagen/optimization-experiments.svg?branch=master)](https://travis-ci.org/bverhagen/optimization-experiments)
-More extensive testing and its results can be found on the Gitlab mirror: [https://gitlab.com/bverhagen/optimization-experiments].
+Gitlab: [![build status](https://gitlab.com/bverhagen/optimization-experiments/badges/master/build.svg)](https://gitlab.com/bverhagen/optimization-experiments/commits/master)
 
 Dependencies
 ------------
